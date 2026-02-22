@@ -471,15 +471,7 @@
                 <span class="sidebar-header-title" style="color:#4a7c59;font-weight:bold;">Menu</span>
             </div>
             <div class="sidebar-menu-list">
-                <button type="button" id="goHomeBtn">
-                    <!-- Home icon SVG -->
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-                        style="vertical-align:middle;margin-right:8px;">
-                        <path d="M3 12l9-7 9 7" stroke="#4a7c59" stroke-width="2" fill="none" />
-                        <rect x="7" y="12" width="10" height="7" stroke="#4a7c59" stroke-width="2" fill="none" />
-                    </svg>
-                    Home
-                </button>
+                <!-- Home button removed -->
                 <button type="button" id="openSearchPage">
                     <!-- Search icon SVG -->
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -490,13 +482,11 @@
                     Search
                 </button>
                 <button type="button" id="openConverterBtn">
-                    <!-- Convert icon SVG (fixed, centered) -->
+                    <!-- Swap icon: two crossing arrows -->
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
                         style="vertical-align:middle;margin-right:8px;">
-                        <path d="M7 4v4h4" stroke="#4a7c59" stroke-width="2" fill="none" />
-                        <path d="M17 20v-4h-4" stroke="#4a7c59" stroke-width="2" fill="none" />
-                        <path d="M7 20a8 8 0 0 1 10-8" stroke="#4a7c59" stroke-width="2" fill="none" />
-                        <path d="M17 4a8 8 0 0 0-10 8" stroke="#4a7c59" stroke-width="2" fill="none" />
+                        <path d="M4 7h12l-3-3" stroke="#4a7c59" stroke-width="2" fill="none" />
+                        <path d="M20 17H8l3 3" stroke="#4a7c59" stroke-width="2" fill="none" />
                     </svg>
                     Convert
                 </button>
@@ -541,20 +531,28 @@
         <p>Find your next favorite gluten-free treat!</p>
     </header>
     <div class="container" id="mainContainer">
-        <p
-            style="text-align:center; color:#888; margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-            Welcome to Gluten-Free Baking!<br>Use the menu to get started.</p>
+        <!-- Main container removed, starter page is search -->
     </div>
     <div class="container" id="searchContainer" style="display:none;">
-                <div id="categoryFilter" style="margin-bottom:2vw;display:flex;flex-wrap:wrap;gap:0.5rem;justify-content:center;align-items:center;">
-                    <button class="category-btn" data-category="all" style="background:#6ab187;color:#fff;border:none;padding:0.5rem 1rem;border-radius:1rem;cursor:pointer;">All</button>
-                    <button class="category-btn" data-category="bread" style="background:#eaf6ee;color:#4a7c59;border:none;padding:0.5rem 1rem;border-radius:1rem;cursor:pointer;">Bread</button>
-                    <button class="category-btn" data-category="cake" style="background:#eaf6ee;color:#4a7c59;border:none;padding:0.5rem 1rem;border-radius:1rem;cursor:pointer;">Cake</button>
-                    <button class="category-btn" data-category="cookies" style="background:#eaf6ee;color:#4a7c59;border:none;padding:0.5rem 1rem;border-radius:1rem;cursor:pointer;">Cookies</button>
-                    <button class="category-btn" data-category="muffins" style="background:#eaf6ee;color:#4a7c59;border:none;padding:0.5rem 1rem;border-radius:1rem;cursor:pointer;">Muffins</button>
-                    <button class="category-btn" data-category="bars" style="background:#eaf6ee;color:#4a7c59;border:none;padding:0.5rem 1rem;border-radius:1rem;cursor:pointer;">Bars</button>
-                    <button class="category-btn" data-category="pancakes" style="background:#eaf6ee;color:#4a7c59;border:none;padding:0.5rem 1rem;border-radius:1rem;cursor:pointer;">Pancakes</button>
-                </div>
+        <div id="categoryFilter"
+            style="margin-bottom:2vw;display:flex;flex-wrap:wrap;gap:0.5rem;justify-content:center;">
+            <button class="category-btn" data-category="all"
+                style="background:#6ab187;color:#fff;border:none;padding:0.5rem 1rem;border-radius:1rem;cursor:pointer;opacity:1;">All</button>
+            <button class="category-btn" data-category="bars"
+                style="background:#eaf6ee;color:#4a7c59;border:none;padding:0.5rem 1rem;border-radius:1rem;cursor:pointer;opacity:1;">Bars</button>
+            <button class="category-btn" data-category="bread"
+                style="background:#eaf6ee;color:#4a7c59;border:none;padding:0.5rem 1rem;border-radius:1rem;cursor:pointer;opacity:1;">Bread</button>
+            <button class="category-btn" data-category="cake"
+                style="background:#eaf6ee;color:#4a7c59;border:none;padding:0.5rem 1rem;border-radius:1rem;cursor:pointer;opacity:1;">Cake</button>
+            <button class="category-btn" data-category="cookies"
+                style="background:#eaf6ee;color:#4a7c59;border:none;padding:0.5rem 1rem;border-radius:1rem;cursor:pointer;opacity:1;">Cookies</button>
+            <button class="category-btn" data-category="muffins"
+                style="background:#eaf6ee;color:#4a7c59;border:none;padding:0.5rem 1rem;border-radius:1rem;cursor:pointer;opacity:1;">Muffins</button>
+            <button class="category-btn" data-category="pan"
+                style="background:#eaf6ee;color:#4a7c59;border:none;padding:0.5rem 1rem;border-radius:1rem;cursor:pointer;opacity:1;">Pan</button>
+            <button class="category-btn" data-category="pancakes"
+                style="background:#eaf6ee;color:#4a7c59;border:none;padding:0.5rem 1rem;border-radius:1rem;cursor:pointer;opacity:1;">Pancakes</button>
+        </div>
         <input type="text" id="searchBar" placeholder="Search for recipes...">
         <ul class="recipe-list" id="recipeList">
             <!-- Recipes will appear here -->
@@ -576,13 +574,7 @@
                 favorites = recipes.filter(r => favTitles.includes(r.title));
                 updateFavoritesSidebar();
             }
-            // Home button logic
-            const goHomeBtn = document.getElementById('goHomeBtn');
-            goHomeBtn.addEventListener('click', function () {
-                mainContainer.style.display = '';
-                searchContainer.style.display = 'none';
-                closeSidebar();
-            });
+            // Home button removed
             // Sidebar menu open/close logic
             const menuBtn = document.getElementById('menuBtn');
             const sidebarMenu = document.getElementById('sidebarMenu');
@@ -635,6 +627,9 @@
             const openConverterBtn = document.getElementById('openConverterBtn');
             const mainContainer = document.getElementById('mainContainer');
             const searchContainer = document.getElementById('searchContainer');
+            // Make search the starter page
+            mainContainer.style.display = 'none';
+            searchContainer.style.display = '';
 
             openSearchPageBtn.addEventListener('click', function () {
                 mainContainer.style.display = 'none';
@@ -796,86 +791,86 @@
             // Recipes and favorites logic
             // Recipes array
             const recipes = [
-                    {
-                        title: "Gluten-Free Chocolate Muffins",
-                        desc: "Rich, moist chocolate muffins with gluten-free flour.",
-                        ingredients: ["1.5 cups gluten-free flour", "1/2 cup cocoa powder", "1 cup sugar", "2 eggs", "1/2 cup oil", "1/2 cup milk", "1 tsp baking powder"],
-                        ovenTime: "20 minutes",
-                        ovenTemp: "180°C (355°F)",
-                        instructions: "Mix dry and wet ingredients separately. Combine, pour into muffin tin. Bake for 20 minutes. Cool and enjoy."
-                    },
-                    {
-                        title: "Gluten-Free Cheese Biscuits",
-                        desc: "Savory, cheesy biscuits perfect for breakfast or snacks.",
-                        ingredients: ["2 cups gluten-free flour", "1/2 cup shredded cheese", "1/2 cup butter", "1/2 cup milk", "1 egg", "1 tsp baking powder", "1/2 tsp salt"],
-                        ovenTime: "15 minutes",
-                        ovenTemp: "200°C (400°F)",
-                        instructions: "Mix ingredients, shape, bake for 15 minutes. Serve warm."
-                    },
-                    {
-                        title: "Gluten-Free Pumpkin Bread",
-                        desc: "Moist pumpkin bread with warm spices.",
-                        ingredients: ["1.5 cups gluten-free flour", "1 cup pumpkin puree", "1/2 cup sugar", "2 eggs", "1/4 cup oil", "1 tsp cinnamon", "1/2 tsp nutmeg", "1/2 tsp baking soda", "1/2 tsp salt"],
-                        ovenTime: "45 minutes",
-                        ovenTemp: "175°C (350°F)",
-                        instructions: "Mix all ingredients. Pour into loaf pan. Bake for 45 minutes. Let cool before slicing."
-                    },
-                    {
-                        title: "Gluten-Free Peanut Butter Cookies",
-                        desc: "Simple, chewy peanut butter cookies.",
-                        ingredients: ["1 cup peanut butter", "1 cup sugar", "1 egg", "1/2 tsp baking soda"],
-                        ovenTime: "10 minutes",
-                        ovenTemp: "180°C (355°F)",
-                        instructions: "Mix ingredients, shape into balls, flatten with fork. Bake for 10 minutes. Let cool."
-                    },
-                    {
-                        title: "Gluten-Free Lemon Bars",
-                        desc: "Tangy lemon bars with a gluten-free crust.",
-                        ingredients: ["1.5 cups gluten-free flour", "1/2 cup butter", "1/4 cup sugar", "2 eggs", "1 cup lemon juice", "1 cup sugar", "1 tbsp cornstarch"],
-                        ovenTime: "30 minutes",
-                        ovenTemp: "180°C (355°F)",
-                        instructions: "Mix crust ingredients, bake for 10 minutes. Mix filling, pour over crust, bake for 20 minutes. Cool and cut."
-                    },
-                    {
-                        title: "Gluten-Free Granola Bars",
-                        desc: "Healthy granola bars with gluten-free oats.",
-                        ingredients: ["2 cups gluten-free oats", "1/2 cup honey", "1/2 cup peanut butter", "1/4 cup chocolate chips", "1/4 cup dried fruit"],
-                        ovenTime: "No bake",
-                        ovenTemp: "Refrigerate",
-                        instructions: "Mix ingredients, press into pan, refrigerate for 2 hours. Cut into bars."
-                    },
-                    {
-                        title: "Gluten-Free Apple Muffins",
-                        desc: "Moist apple muffins with cinnamon.",
-                        ingredients: ["1.5 cups gluten-free flour", "1 cup diced apples", "1/2 cup sugar", "2 eggs", "1/4 cup oil", "1 tsp cinnamon", "1 tsp baking powder"],
-                        ovenTime: "18 minutes",
-                        ovenTemp: "180°C (355°F)",
-                        instructions: "Mix ingredients, pour into muffin tin, bake for 18 minutes. Cool and enjoy."
-                    },
-                    {
-                        title: "Gluten-Free Garlic Bread",
-                        desc: "Crispy garlic bread with gluten-free baguette.",
-                        ingredients: ["1 gluten-free baguette", "1/4 cup butter", "2 cloves garlic", "1 tbsp parsley", "1/2 tsp salt"],
-                        ovenTime: "10 minutes",
-                        ovenTemp: "200°C (400°F)",
-                        instructions: "Slice baguette, spread garlic butter, bake for 10 minutes. Serve hot."
-                    },
-                    {
-                        title: "Gluten-Free Blueberry Pancakes",
-                        desc: "Fluffy pancakes with blueberries.",
-                        ingredients: ["1 cup gluten-free flour", "1 tbsp sugar", "1 tsp baking powder", "1/2 tsp salt", "1 cup milk", "1 egg", "2 tbsp melted butter", "1/2 cup blueberries"],
-                        ovenTime: "Cook 2-3 min per side",
-                        ovenTemp: "Medium skillet",
-                        instructions: "Mix ingredients, fold in blueberries, cook on skillet until golden."
-                    },
-                    {
-                        title: "Gluten-Free Vanilla Cake",
-                        desc: "Classic vanilla cake with gluten-free flour.",
-                        ingredients: ["2 cups gluten-free flour", "1 cup sugar", "2 eggs", "1/2 cup butter", "1 cup milk", "1 tsp vanilla", "1 tsp baking powder"],
-                        ovenTime: "30 minutes",
-                        ovenTemp: "180°C (355°F)",
-                        instructions: "Mix ingredients, pour into cake pan, bake for 30 minutes. Cool and frost."
-                    },
+                {
+                    title: "Gluten-Free Chocolate Muffins",
+                    desc: "Rich, moist chocolate muffins with gluten-free flour.",
+                    ingredients: ["1.5 cups gluten-free flour", "1/2 cup cocoa powder", "1 cup sugar", "2 eggs", "1/2 cup oil", "1/2 cup milk", "1 tsp baking powder"],
+                    ovenTime: "20 minutes",
+                    ovenTemp: "180°C (355°F)",
+                    instructions: "Mix dry and wet ingredients separately. Combine, pour into muffin tin. Bake for 20 minutes. Cool and enjoy."
+                },
+                {
+                    title: "Gluten-Free Cheese Biscuits",
+                    desc: "Savory, cheesy biscuits perfect for breakfast or snacks.",
+                    ingredients: ["2 cups gluten-free flour", "1/2 cup shredded cheese", "1/2 cup butter", "1/2 cup milk", "1 egg", "1 tsp baking powder", "1/2 tsp salt"],
+                    ovenTime: "15 minutes",
+                    ovenTemp: "200°C (400°F)",
+                    instructions: "Mix ingredients, shape, bake for 15 minutes. Serve warm."
+                },
+                {
+                    title: "Gluten-Free Pumpkin Bread",
+                    desc: "Moist pumpkin bread with warm spices.",
+                    ingredients: ["1.5 cups gluten-free flour", "1 cup pumpkin puree", "1/2 cup sugar", "2 eggs", "1/4 cup oil", "1 tsp cinnamon", "1/2 tsp nutmeg", "1/2 tsp baking soda", "1/2 tsp salt"],
+                    ovenTime: "45 minutes",
+                    ovenTemp: "175°C (350°F)",
+                    instructions: "Mix all ingredients. Pour into loaf pan. Bake for 45 minutes. Let cool before slicing."
+                },
+                {
+                    title: "Gluten-Free Peanut Butter Cookies",
+                    desc: "Simple, chewy peanut butter cookies.",
+                    ingredients: ["1 cup peanut butter", "1 cup sugar", "1 egg", "1/2 tsp baking soda"],
+                    ovenTime: "10 minutes",
+                    ovenTemp: "180°C (355°F)",
+                    instructions: "Mix ingredients, shape into balls, flatten with fork. Bake for 10 minutes. Let cool."
+                },
+                {
+                    title: "Gluten-Free Lemon Bars",
+                    desc: "Tangy lemon bars with a gluten-free crust.",
+                    ingredients: ["1.5 cups gluten-free flour", "1/2 cup butter", "1/4 cup sugar", "2 eggs", "1 cup lemon juice", "1 cup sugar", "1 tbsp cornstarch"],
+                    ovenTime: "30 minutes",
+                    ovenTemp: "180°C (355°F)",
+                    instructions: "Mix crust ingredients, bake for 10 minutes. Mix filling, pour over crust, bake for 20 minutes. Cool and cut."
+                },
+                {
+                    title: "Gluten-Free Granola Bars",
+                    desc: "Healthy granola bars with gluten-free oats.",
+                    ingredients: ["2 cups gluten-free oats", "1/2 cup honey", "1/2 cup peanut butter", "1/4 cup chocolate chips", "1/4 cup dried fruit"],
+                    ovenTime: "No bake",
+                    ovenTemp: "Refrigerate",
+                    instructions: "Mix ingredients, press into pan, refrigerate for 2 hours. Cut into bars."
+                },
+                {
+                    title: "Gluten-Free Apple Muffins",
+                    desc: "Moist apple muffins with cinnamon.",
+                    ingredients: ["1.5 cups gluten-free flour", "1 cup diced apples", "1/2 cup sugar", "2 eggs", "1/4 cup oil", "1 tsp cinnamon", "1 tsp baking powder"],
+                    ovenTime: "18 minutes",
+                    ovenTemp: "180°C (355°F)",
+                    instructions: "Mix ingredients, pour into muffin tin, bake for 18 minutes. Cool and enjoy."
+                },
+                {
+                    title: "Gluten-Free Garlic Bread",
+                    desc: "Crispy garlic bread with gluten-free baguette.",
+                    ingredients: ["1 gluten-free baguette", "1/4 cup butter", "2 cloves garlic", "1 tbsp parsley", "1/2 tsp salt"],
+                    ovenTime: "10 minutes",
+                    ovenTemp: "200°C (400°F)",
+                    instructions: "Slice baguette, spread garlic butter, bake for 10 minutes. Serve hot."
+                },
+                {
+                    title: "Gluten-Free Blueberry Pancakes",
+                    desc: "Fluffy pancakes with blueberries.",
+                    ingredients: ["1 cup gluten-free flour", "1 tbsp sugar", "1 tsp baking powder", "1/2 tsp salt", "1 cup milk", "1 egg", "2 tbsp melted butter", "1/2 cup blueberries"],
+                    ovenTime: "Cook 2-3 min per side",
+                    ovenTemp: "Medium skillet",
+                    instructions: "Mix ingredients, fold in blueberries, cook on skillet until golden."
+                },
+                {
+                    title: "Gluten-Free Vanilla Cake",
+                    desc: "Classic vanilla cake with gluten-free flour.",
+                    ingredients: ["2 cups gluten-free flour", "1 cup sugar", "2 eggs", "1/2 cup butter", "1 cup milk", "1 tsp vanilla", "1 tsp baking powder"],
+                    ovenTime: "30 minutes",
+                    ovenTemp: "180°C (355°F)",
+                    instructions: "Mix ingredients, pour into cake pan, bake for 30 minutes. Cool and frost."
+                },
                 {
                     title: "Gluten-Free Bagels",
                     desc: "Chewy, delicious bagels made gluten-free.",
@@ -1118,6 +1113,8 @@
             const recipeList = document.getElementById('recipeList');
             function displayRecipes(recipesToShow) {
                 recipeList.innerHTML = '';
+                // Sort recipes alphabetically by title
+                recipesToShow.sort((a, b) => a.title.localeCompare(b.title));
                 recipesToShow.forEach(recipe => {
                     const li = document.createElement('li');
                     li.style.listStyle = 'none';
@@ -1156,12 +1153,13 @@
             const searchBar = document.getElementById('searchBar');
             // Recipe categories
             const recipeCategories = {
-                bread: ["Bagels", "Flatbread", "Breadsticks", "Banana Bread", "Focaccia", "Pizza", "Garlic Bread"],
-                cake: ["Chocolate Cake", "Vanilla Cake", "Carrot Cake", "Lemon Poppy Seed Muffins", "Pumpkin Bread"],
-                cookies: ["Brownies", "Shortbread", "Chocolate Chip Cookies", "Peanut Butter Cookies", "Oatmeal Raisin Cookies", "Apple Crisp", "Lemon Bars"],
-                muffins: ["Apple Muffins", "Chocolate Muffins", "Cupcakes", "Cinnamon Rolls"],
+                bread: ["Bagels", "Flatbread", "Breadsticks", "Banana Bread", "Focaccia", "Pizza", "Garlic Bread", "Pumpkin Bread", "Shortbread"],
+                cake: ["Chocolate Cake", "Vanilla Cake", "Carrot Cake", "Cupcakes"],
+                cookies: ["Chocolate Chip Cookies", "Peanut Butter Cookies", "Oatmeal Raisin Cookies"],
+                muffins: ["Apple Muffins", "Chocolate Muffins", "Lemon Poppy Seed Muffins"],
                 bars: ["Granola Bars", "Lemon Bars"],
                 pancakes: ["Pancakes", "Blueberry Pancakes", "Waffles"],
+                pan: ["Apple Crisp", "Cinnamon Rolls", "Brownies"],
             };
             let selectedCategory = "all";
             function filteredRecipes() {
@@ -1178,8 +1176,11 @@
             }
             // Category filter logic
             document.querySelectorAll('.category-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('.category-btn').forEach(b => b.style.background = '#eaf6ee');
+                btn.addEventListener('click', function () {
+                    document.querySelectorAll('.category-btn').forEach(b => {
+                        b.style.background = '#eaf6ee';
+                        b.style.color = '#4a7c59';
+                    });
                     this.style.background = '#6ab187';
                     this.style.color = '#fff';
                     selectedCategory = this.dataset.category;
