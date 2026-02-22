@@ -471,16 +471,6 @@
                 <span class="sidebar-header-title" style="color:#4a7c59;font-weight:bold;">Menu</span>
             </div>
             <div class="sidebar-menu-list">
-                <button type="button" id="openTimerBtn">
-                    <!-- Timer icon SVG -->
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-                        style="vertical-align:middle;margin-right:8px;">
-                        <circle cx="12" cy="12" r="9" stroke="#4a7c59" stroke-width="2" fill="none" />
-                        <rect x="11" y="6" width="2" height="7" rx="1" fill="#4a7c59" />
-                        <circle cx="12" cy="12" r="1.5" fill="#4a7c59" />
-                    </svg>
-                    Timer
-                </button>
                 <button type="button" id="goHomeBtn">
                     <!-- Home icon SVG -->
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -510,15 +500,17 @@
                     </svg>
                     Convert
                 </button>
-                <button type="button" id="profileBtn">
-                    <!-- Profile icon SVG -->
+                <button type="button" id="openTimerBtn">
+                    <!-- Timer icon SVG -->
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
                         style="vertical-align:middle;margin-right:8px;">
-                        <circle cx="12" cy="8" r="4" stroke="#4a7c59" stroke-width="2" fill="none" />
-                        <path d="M4 20c0-4 8-4 8-4s8 0 8 4" stroke="#4a7c59" stroke-width="2" fill="none" />
+                        <circle cx="12" cy="12" r="9" stroke="#4a7c59" stroke-width="2" fill="none" />
+                        <rect x="11" y="6" width="2" height="7" rx="1" fill="#4a7c59" />
+                        <circle cx="12" cy="12" r="1.5" fill="#4a7c59" />
                     </svg>
-                    Profile
+                    Timer
                 </button>
+                <!-- Profile button removed -->
             </div>
         </nav>
         <button class="header-icon heart-icon" aria-label="Favorites" id="openHeartMenu">
@@ -554,80 +546,35 @@
             Welcome to Gluten-Free Baking!<br>Use the menu to get started.</p>
     </div>
     <div class="container" id="searchContainer" style="display:none;">
+                <div id="categoryFilter" style="margin-bottom:2vw;display:flex;flex-wrap:wrap;gap:0.5rem;justify-content:center;align-items:center;">
+                    <button class="category-btn" data-category="all" style="background:#6ab187;color:#fff;border:none;padding:0.5rem 1rem;border-radius:1rem;cursor:pointer;">All</button>
+                    <button class="category-btn" data-category="bread" style="background:#eaf6ee;color:#4a7c59;border:none;padding:0.5rem 1rem;border-radius:1rem;cursor:pointer;">Bread</button>
+                    <button class="category-btn" data-category="cake" style="background:#eaf6ee;color:#4a7c59;border:none;padding:0.5rem 1rem;border-radius:1rem;cursor:pointer;">Cake</button>
+                    <button class="category-btn" data-category="cookies" style="background:#eaf6ee;color:#4a7c59;border:none;padding:0.5rem 1rem;border-radius:1rem;cursor:pointer;">Cookies</button>
+                    <button class="category-btn" data-category="muffins" style="background:#eaf6ee;color:#4a7c59;border:none;padding:0.5rem 1rem;border-radius:1rem;cursor:pointer;">Muffins</button>
+                    <button class="category-btn" data-category="bars" style="background:#eaf6ee;color:#4a7c59;border:none;padding:0.5rem 1rem;border-radius:1rem;cursor:pointer;">Bars</button>
+                    <button class="category-btn" data-category="pancakes" style="background:#eaf6ee;color:#4a7c59;border:none;padding:0.5rem 1rem;border-radius:1rem;cursor:pointer;">Pancakes</button>
+                </div>
         <input type="text" id="searchBar" placeholder="Search for recipes...">
         <ul class="recipe-list" id="recipeList">
             <!-- Recipes will appear here -->
         </ul>
     </div>
     <div class="container" id="profileContainer" style="display:none;">
-        <h2 style="color:#4a7c59;text-align:center;">Profile</h2>
-        <div style="text-align:center;margin-bottom:2rem;">
-            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="8" r="4" stroke="#4a7c59" stroke-width="2" fill="#eaf6ee" />
-                <path d="M4 20c0-4 8-4 8-4s8 0 8 4" stroke="#4a7c59" stroke-width="2" fill="#eaf6ee" />
-            </svg>
-        </div>
-        <div style="text-align:center;">
-            <p style="font-size:1.1rem;color:#555;">Name: <span id="profileName">Guest</span></p>
-            <p style="font-size:1.1rem;color:#555;">Email: <span id="profileEmail">guest@example.com</span></p>
-            <button id="signInBtn"
-                style="background:#4285F4;color:#fff;border:none;padding:0.7rem 1.5rem;border-radius:1rem;font-size:1rem;cursor:pointer;margin-top:1rem;">
-                <svg style="vertical-align:middle;margin-right:8px;" width="24" height="24" viewBox="0 0 24 24">
-                    <g>
-                        <path fill="#fff"
-                            d="M21.35 11.1h-9.18v2.8h5.22c-.22 1.2-1.32 3.5-5.22 3.5-3.14 0-5.7-2.6-5.7-5.8s2.56-5.8 5.7-5.8c1.8 0 3 .7 3.7 1.3l2.5-2.4C17.1 3.7 15.2 2.7 12.9 2.7c-5.1 0-9.2 4.1-9.2 9.2s4.1 9.2 9.2 9.2c5.3 0 8.8-3.7 8.8-8.9 0-.6-.1-1.1-.2-1.7z" />
-                        <path fill="#4285F4"
-                            d="M21.35 11.1h-9.18v2.8h5.22c-.22 1.2-1.32 3.5-5.22 3.5-3.14 0-5.7-2.6-5.7-5.8s2.56-5.8 5.7-5.8c1.8 0 3 .7 3.7 1.3l2.5-2.4C17.1 3.7 15.2 2.7 12.9 2.7c-5.1 0-9.2 4.1-9.2 9.2s4.1 9.2 9.2 9.2c5.3 0 8.8-3.7 8.8-8.9 0-.6-.1-1.1-.2-1.7z" />
-                        <path fill="#34A853"
-                            d="M12.17 17.4c2.9 0 4.8-1.2 5.7-3.5l-5.7-2.8v-2.8h9.18c.1.6.2 1.1.2 1.7 0 5.2-3.5 8.9-8.8 8.9-5.1 0-9.2-4.1-9.2-9.2s4.1-9.2 9.2-9.2c2.3 0 4.2 1 5.6 2.6l-2.5 2.4c-.7-.6-1.9-1.3-3.7-1.3-3.14 0-5.7 2.6-5.7 5.8s2.56 5.8 5.7 5.8z" />
-                    </g>
-                </svg>
-                Sign in with Google
-            </button>
-            <button id="signOutBtn"
-                style="background:#6ab187;color:#fff;border:none;padding:0.7rem 1.5rem;border-radius:1rem;font-size:1rem;cursor:pointer;margin-top:1rem;display:none;">Sign
-                Out</button>
-        </div>
+        <!-- Profile section removed -->
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Firebase Google sign-in logic
-            const signInBtn = document.getElementById('signInBtn');
-            const signOutBtn = document.getElementById('signOutBtn');
-            let currentUser = null;
-            signInBtn.addEventListener('click', function () {
-                const provider = new firebase.auth.GoogleAuthProvider();
-                firebase.auth().signInWithPopup(provider)
-                    .then((result) => {
-                        currentUser = result.user;
-                        updateProfileUI();
-                    })
-                    .catch((error) => {
-                        alert('Sign-in failed: ' + error.message);
-                    });
-            });
-            signOutBtn.addEventListener('click', function () {
-                firebase.auth().signOut().then(() => {
-                    currentUser = null;
-                    updateProfileUI();
-                });
-            });
-            firebase.auth().onAuthStateChanged(function (user) {
-                currentUser = user;
-                updateProfileUI();
-            });
-            function updateProfileUI() {
-                if (currentUser) {
-                    document.getElementById('profileName').textContent = currentUser.displayName || 'Google User';
-                    document.getElementById('profileEmail').textContent = currentUser.email || '';
-                    signInBtn.style.display = 'none';
-                    signOutBtn.style.display = '';
-                } else {
-                    document.getElementById('profileName').textContent = 'Guest';
-                    document.getElementById('profileEmail').textContent = 'guest@example.com';
-                    signInBtn.style.display = '';
-                    signOutBtn.style.display = 'none';
-                }
+            // ...existing code...
+            // Store favorites locally
+            // favorites variable declared later, remove duplicate
+            function saveFavoritesToLocal() {
+                localStorage.setItem('favorites', JSON.stringify(favorites.map(r => r.title)));
+            }
+            function loadFavoritesFromLocal() {
+                const favTitles = JSON.parse(localStorage.getItem('favorites') || '[]');
+                favorites = recipes.filter(r => favTitles.includes(r.title));
+                updateFavoritesSidebar();
             }
             // Home button logic
             const goHomeBtn = document.getElementById('goHomeBtn');
@@ -683,24 +630,15 @@
             });
 
             // Sidebar navigation logic
+
             const openSearchPageBtn = document.getElementById('openSearchPage');
             const openConverterBtn = document.getElementById('openConverterBtn');
-            const profileBtn = document.getElementById('profileBtn');
             const mainContainer = document.getElementById('mainContainer');
             const searchContainer = document.getElementById('searchContainer');
-            const profileContainer = document.getElementById('profileContainer');
 
             openSearchPageBtn.addEventListener('click', function () {
                 mainContainer.style.display = 'none';
                 searchContainer.style.display = '';
-                profileContainer.style.display = 'none';
-                closeSidebar();
-            });
-
-            profileBtn.addEventListener('click', function () {
-                mainContainer.style.display = 'none';
-                searchContainer.style.display = 'none';
-                profileContainer.style.display = '';
                 closeSidebar();
             });
 
@@ -858,6 +796,86 @@
             // Recipes and favorites logic
             // Recipes array
             const recipes = [
+                    {
+                        title: "Gluten-Free Chocolate Muffins",
+                        desc: "Rich, moist chocolate muffins with gluten-free flour.",
+                        ingredients: ["1.5 cups gluten-free flour", "1/2 cup cocoa powder", "1 cup sugar", "2 eggs", "1/2 cup oil", "1/2 cup milk", "1 tsp baking powder"],
+                        ovenTime: "20 minutes",
+                        ovenTemp: "180°C (355°F)",
+                        instructions: "Mix dry and wet ingredients separately. Combine, pour into muffin tin. Bake for 20 minutes. Cool and enjoy."
+                    },
+                    {
+                        title: "Gluten-Free Cheese Biscuits",
+                        desc: "Savory, cheesy biscuits perfect for breakfast or snacks.",
+                        ingredients: ["2 cups gluten-free flour", "1/2 cup shredded cheese", "1/2 cup butter", "1/2 cup milk", "1 egg", "1 tsp baking powder", "1/2 tsp salt"],
+                        ovenTime: "15 minutes",
+                        ovenTemp: "200°C (400°F)",
+                        instructions: "Mix ingredients, shape, bake for 15 minutes. Serve warm."
+                    },
+                    {
+                        title: "Gluten-Free Pumpkin Bread",
+                        desc: "Moist pumpkin bread with warm spices.",
+                        ingredients: ["1.5 cups gluten-free flour", "1 cup pumpkin puree", "1/2 cup sugar", "2 eggs", "1/4 cup oil", "1 tsp cinnamon", "1/2 tsp nutmeg", "1/2 tsp baking soda", "1/2 tsp salt"],
+                        ovenTime: "45 minutes",
+                        ovenTemp: "175°C (350°F)",
+                        instructions: "Mix all ingredients. Pour into loaf pan. Bake for 45 minutes. Let cool before slicing."
+                    },
+                    {
+                        title: "Gluten-Free Peanut Butter Cookies",
+                        desc: "Simple, chewy peanut butter cookies.",
+                        ingredients: ["1 cup peanut butter", "1 cup sugar", "1 egg", "1/2 tsp baking soda"],
+                        ovenTime: "10 minutes",
+                        ovenTemp: "180°C (355°F)",
+                        instructions: "Mix ingredients, shape into balls, flatten with fork. Bake for 10 minutes. Let cool."
+                    },
+                    {
+                        title: "Gluten-Free Lemon Bars",
+                        desc: "Tangy lemon bars with a gluten-free crust.",
+                        ingredients: ["1.5 cups gluten-free flour", "1/2 cup butter", "1/4 cup sugar", "2 eggs", "1 cup lemon juice", "1 cup sugar", "1 tbsp cornstarch"],
+                        ovenTime: "30 minutes",
+                        ovenTemp: "180°C (355°F)",
+                        instructions: "Mix crust ingredients, bake for 10 minutes. Mix filling, pour over crust, bake for 20 minutes. Cool and cut."
+                    },
+                    {
+                        title: "Gluten-Free Granola Bars",
+                        desc: "Healthy granola bars with gluten-free oats.",
+                        ingredients: ["2 cups gluten-free oats", "1/2 cup honey", "1/2 cup peanut butter", "1/4 cup chocolate chips", "1/4 cup dried fruit"],
+                        ovenTime: "No bake",
+                        ovenTemp: "Refrigerate",
+                        instructions: "Mix ingredients, press into pan, refrigerate for 2 hours. Cut into bars."
+                    },
+                    {
+                        title: "Gluten-Free Apple Muffins",
+                        desc: "Moist apple muffins with cinnamon.",
+                        ingredients: ["1.5 cups gluten-free flour", "1 cup diced apples", "1/2 cup sugar", "2 eggs", "1/4 cup oil", "1 tsp cinnamon", "1 tsp baking powder"],
+                        ovenTime: "18 minutes",
+                        ovenTemp: "180°C (355°F)",
+                        instructions: "Mix ingredients, pour into muffin tin, bake for 18 minutes. Cool and enjoy."
+                    },
+                    {
+                        title: "Gluten-Free Garlic Bread",
+                        desc: "Crispy garlic bread with gluten-free baguette.",
+                        ingredients: ["1 gluten-free baguette", "1/4 cup butter", "2 cloves garlic", "1 tbsp parsley", "1/2 tsp salt"],
+                        ovenTime: "10 minutes",
+                        ovenTemp: "200°C (400°F)",
+                        instructions: "Slice baguette, spread garlic butter, bake for 10 minutes. Serve hot."
+                    },
+                    {
+                        title: "Gluten-Free Blueberry Pancakes",
+                        desc: "Fluffy pancakes with blueberries.",
+                        ingredients: ["1 cup gluten-free flour", "1 tbsp sugar", "1 tsp baking powder", "1/2 tsp salt", "1 cup milk", "1 egg", "2 tbsp melted butter", "1/2 cup blueberries"],
+                        ovenTime: "Cook 2-3 min per side",
+                        ovenTemp: "Medium skillet",
+                        instructions: "Mix ingredients, fold in blueberries, cook on skillet until golden."
+                    },
+                    {
+                        title: "Gluten-Free Vanilla Cake",
+                        desc: "Classic vanilla cake with gluten-free flour.",
+                        ingredients: ["2 cups gluten-free flour", "1 cup sugar", "2 eggs", "1/2 cup butter", "1 cup milk", "1 tsp vanilla", "1 tsp baking powder"],
+                        ovenTime: "30 minutes",
+                        ovenTemp: "180°C (355°F)",
+                        instructions: "Mix ingredients, pour into cake pan, bake for 30 minutes. Cool and frost."
+                    },
                 {
                     title: "Gluten-Free Bagels",
                     desc: "Chewy, delicious bagels made gluten-free.",
@@ -1136,11 +1154,38 @@
 
             // Search bar logic
             const searchBar = document.getElementById('searchBar');
+            // Recipe categories
+            const recipeCategories = {
+                bread: ["Bagels", "Flatbread", "Breadsticks", "Banana Bread", "Focaccia", "Pizza", "Garlic Bread"],
+                cake: ["Chocolate Cake", "Vanilla Cake", "Carrot Cake", "Lemon Poppy Seed Muffins", "Pumpkin Bread"],
+                cookies: ["Brownies", "Shortbread", "Chocolate Chip Cookies", "Peanut Butter Cookies", "Oatmeal Raisin Cookies", "Apple Crisp", "Lemon Bars"],
+                muffins: ["Apple Muffins", "Chocolate Muffins", "Cupcakes", "Cinnamon Rolls"],
+                bars: ["Granola Bars", "Lemon Bars"],
+                pancakes: ["Pancakes", "Blueberry Pancakes", "Waffles"],
+            };
+            let selectedCategory = "all";
             function filteredRecipes() {
                 const query = searchBar.value.trim().toLowerCase();
-                if (!query) return recipes;
-                return recipes.filter(r => r.title.toLowerCase().includes(query) || r.desc.toLowerCase().includes(query));
+                let filtered = recipes;
+                if (selectedCategory !== "all") {
+                    const catTitles = recipeCategories[selectedCategory] || [];
+                    filtered = filtered.filter(r => catTitles.some(t => r.title.toLowerCase().includes(t.toLowerCase())));
+                }
+                if (query) {
+                    filtered = filtered.filter(r => r.title.toLowerCase().includes(query) || r.desc.toLowerCase().includes(query));
+                }
+                return filtered;
             }
+            // Category filter logic
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.category-btn').forEach(b => b.style.background = '#eaf6ee');
+                    this.style.background = '#6ab187';
+                    this.style.color = '#fff';
+                    selectedCategory = this.dataset.category;
+                    displayRecipes(filteredRecipes());
+                });
+            });
             searchBar.addEventListener('input', function () {
                 displayRecipes(filteredRecipes());
             });
