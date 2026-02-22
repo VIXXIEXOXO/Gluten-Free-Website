@@ -145,8 +145,8 @@
 
         #searchBar {
             width: 100%;
-            padding: 3vw 1vw;
-            font-size: 1.1rem;
+            padding: 1vw 0.5vw;
+            font-size: 0.95rem;
             border: 1px solid #ccc;
             border-radius: 1vw;
             margin-bottom: 4vw;
@@ -187,7 +187,8 @@
             }
 
             #searchBar {
-                font-size: 1rem;
+                font-size: 0.85rem;
+                padding: 0.7vw 0.3vw;
             }
 
             .header-icon {
@@ -208,6 +209,11 @@
             }
         }
     </style>
+    <!-- Firebase scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
     <style>
         /* Modal styles for converter */
         .modal-converter {
@@ -394,6 +400,25 @@
 </head>
 
 <body>
+    <!-- Timer Modal -->
+    <div class="modal-converter" id="timerModal">
+        <div class="modal-content">
+            <button class="modal-close-btn" id="closeTimerModal" aria-label="Close timer">&times;</button>
+            <h2>Oven Baking Timer</h2>
+            <form id="timerForm" style="display:flex;flex-direction:column;gap:1rem;align-items:center;">
+                <label for="timerMinutes" style="font-size:1.1rem;color:#4a7c59;">Set timer (minutes):</label>
+                <input type="number" id="timerMinutes" min="1" max="240" step="1" required
+                    style="font-size:1.1rem;padding:0.5rem;border-radius:0.5rem;border:1px solid #6ab187;width:120px;text-align:center;">
+                <button type="submit"
+                    style="background:#6ab187;color:#fff;border:none;padding:0.7rem 1.5rem;border-radius:1rem;font-size:1rem;cursor:pointer;">Start
+                    Timer</button>
+                <button type="button" id="resetTimerBtn"
+                    style="background:#e57373;color:#fff;border:none;padding:0.7rem 1.5rem;border-radius:1rem;font-size:1rem;cursor:pointer;">Reset
+                    Timer</button>
+            </form>
+            <div id="timerDisplay" style="text-align:center;font-size:1.3rem;color:#4a7c59;margin-top:1rem;"></div>
+        </div>
+    </div>
     <!-- Baking Measurement Converter Modal -->
     <div class="modal-converter" id="converterModal">
         <div class="modal-content">
@@ -446,31 +471,53 @@
                 <span class="sidebar-header-title" style="color:#4a7c59;font-weight:bold;">Menu</span>
             </div>
             <div class="sidebar-menu-list">
-                                <button type="button" id="goHomeBtn">
-                                    <!-- Home icon SVG -->
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;margin-right:8px;">
-                                        <path d="M3 12l9-7 9 7" stroke="#4a7c59" stroke-width="2" fill="none"/>
-                                        <rect x="7" y="12" width="10" height="7" stroke="#4a7c59" stroke-width="2" fill="none"/>
-                                    </svg>
-                                    Home
-                                </button>
+                <button type="button" id="openTimerBtn">
+                    <!-- Timer icon SVG -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        style="vertical-align:middle;margin-right:8px;">
+                        <circle cx="12" cy="12" r="9" stroke="#4a7c59" stroke-width="2" fill="none" />
+                        <rect x="11" y="6" width="2" height="7" rx="1" fill="#4a7c59" />
+                        <circle cx="12" cy="12" r="1.5" fill="#4a7c59" />
+                    </svg>
+                    Timer
+                </button>
+                <button type="button" id="goHomeBtn">
+                    <!-- Home icon SVG -->
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        style="vertical-align:middle;margin-right:8px;">
+                        <path d="M3 12l9-7 9 7" stroke="#4a7c59" stroke-width="2" fill="none" />
+                        <rect x="7" y="12" width="10" height="7" stroke="#4a7c59" stroke-width="2" fill="none" />
+                    </svg>
+                    Home
+                </button>
                 <button type="button" id="openSearchPage">
                     <!-- Search icon SVG -->
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;margin-right:8px;">
-                        <circle cx="11" cy="11" r="8" stroke="#4a7c59" stroke-width="2" fill="none"/>
-                        <line x1="18" y1="18" x2="23" y2="23" stroke="#4a7c59" stroke-width="2"/>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        style="vertical-align:middle;margin-right:8px;">
+                        <circle cx="11" cy="11" r="8" stroke="#4a7c59" stroke-width="2" fill="none" />
+                        <line x1="18" y1="18" x2="23" y2="23" stroke="#4a7c59" stroke-width="2" />
                     </svg>
                     Search
                 </button>
                 <button type="button" id="openConverterBtn">
                     <!-- Convert icon SVG (fixed, centered) -->
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;margin-right:8px;">
-                        <path d="M7 4v4h4" stroke="#4a7c59" stroke-width="2" fill="none"/>
-                        <path d="M17 20v-4h-4" stroke="#4a7c59" stroke-width="2" fill="none"/>
-                        <path d="M7 20a8 8 0 0 1 10-8" stroke="#4a7c59" stroke-width="2" fill="none"/>
-                        <path d="M17 4a8 8 0 0 0-10 8" stroke="#4a7c59" stroke-width="2" fill="none"/>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        style="vertical-align:middle;margin-right:8px;">
+                        <path d="M7 4v4h4" stroke="#4a7c59" stroke-width="2" fill="none" />
+                        <path d="M17 20v-4h-4" stroke="#4a7c59" stroke-width="2" fill="none" />
+                        <path d="M7 20a8 8 0 0 1 10-8" stroke="#4a7c59" stroke-width="2" fill="none" />
+                        <path d="M17 4a8 8 0 0 0-10 8" stroke="#4a7c59" stroke-width="2" fill="none" />
                     </svg>
                     Convert
+                </button>
+                <button type="button" id="profileBtn">
+                    <!-- Profile icon SVG -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        style="vertical-align:middle;margin-right:8px;">
+                        <circle cx="12" cy="8" r="4" stroke="#4a7c59" stroke-width="2" fill="none" />
+                        <path d="M4 20c0-4 8-4 8-4s8 0 8 4" stroke="#4a7c59" stroke-width="2" fill="none" />
+                    </svg>
+                    Profile
                 </button>
             </div>
         </nav>
@@ -502,7 +549,9 @@
         <p>Find your next favorite gluten-free treat!</p>
     </header>
     <div class="container" id="mainContainer">
-        <p style="text-align:center; color:#888;">Welcome to Gluten-Free Baking!<br>Use the menu to get started.</p>
+        <p
+            style="text-align:center; color:#888; margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            Welcome to Gluten-Free Baking!<br>Use the menu to get started.</p>
     </div>
     <div class="container" id="searchContainer" style="display:none;">
         <input type="text" id="searchBar" placeholder="Search for recipes...">
@@ -510,37 +559,105 @@
             <!-- Recipes will appear here -->
         </ul>
     </div>
+    <div class="container" id="profileContainer" style="display:none;">
+        <h2 style="color:#4a7c59;text-align:center;">Profile</h2>
+        <div style="text-align:center;margin-bottom:2rem;">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="8" r="4" stroke="#4a7c59" stroke-width="2" fill="#eaf6ee" />
+                <path d="M4 20c0-4 8-4 8-4s8 0 8 4" stroke="#4a7c59" stroke-width="2" fill="#eaf6ee" />
+            </svg>
+        </div>
+        <div style="text-align:center;">
+            <p style="font-size:1.1rem;color:#555;">Name: <span id="profileName">Guest</span></p>
+            <p style="font-size:1.1rem;color:#555;">Email: <span id="profileEmail">guest@example.com</span></p>
+            <button id="signInBtn"
+                style="background:#4285F4;color:#fff;border:none;padding:0.7rem 1.5rem;border-radius:1rem;font-size:1rem;cursor:pointer;margin-top:1rem;">
+                <svg style="vertical-align:middle;margin-right:8px;" width="24" height="24" viewBox="0 0 24 24">
+                    <g>
+                        <path fill="#fff"
+                            d="M21.35 11.1h-9.18v2.8h5.22c-.22 1.2-1.32 3.5-5.22 3.5-3.14 0-5.7-2.6-5.7-5.8s2.56-5.8 5.7-5.8c1.8 0 3 .7 3.7 1.3l2.5-2.4C17.1 3.7 15.2 2.7 12.9 2.7c-5.1 0-9.2 4.1-9.2 9.2s4.1 9.2 9.2 9.2c5.3 0 8.8-3.7 8.8-8.9 0-.6-.1-1.1-.2-1.7z" />
+                        <path fill="#4285F4"
+                            d="M21.35 11.1h-9.18v2.8h5.22c-.22 1.2-1.32 3.5-5.22 3.5-3.14 0-5.7-2.6-5.7-5.8s2.56-5.8 5.7-5.8c1.8 0 3 .7 3.7 1.3l2.5-2.4C17.1 3.7 15.2 2.7 12.9 2.7c-5.1 0-9.2 4.1-9.2 9.2s4.1 9.2 9.2 9.2c5.3 0 8.8-3.7 8.8-8.9 0-.6-.1-1.1-.2-1.7z" />
+                        <path fill="#34A853"
+                            d="M12.17 17.4c2.9 0 4.8-1.2 5.7-3.5l-5.7-2.8v-2.8h9.18c.1.6.2 1.1.2 1.7 0 5.2-3.5 8.9-8.8 8.9-5.1 0-9.2-4.1-9.2-9.2s4.1-9.2 9.2-9.2c2.3 0 4.2 1 5.6 2.6l-2.5 2.4c-.7-.6-1.9-1.3-3.7-1.3-3.14 0-5.7 2.6-5.7 5.8s2.56 5.8 5.7 5.8z" />
+                    </g>
+                </svg>
+                Sign in with Google
+            </button>
+            <button id="signOutBtn"
+                style="background:#6ab187;color:#fff;border:none;padding:0.7rem 1.5rem;border-radius:1rem;font-size:1rem;cursor:pointer;margin-top:1rem;display:none;">Sign
+                Out</button>
+        </div>
+    </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-                                    // Home button logic
-                                    const goHomeBtn = document.getElementById('goHomeBtn');
-                                    goHomeBtn.addEventListener('click', function () {
-                                        mainContainer.style.display = '';
-                                        searchContainer.style.display = 'none';
-                                        closeSidebar();
-                                    });
-                        // Sidebar menu open/close logic
-                        const menuBtn = document.getElementById('menuBtn');
-                        const sidebarMenu = document.getElementById('sidebarMenu');
-                        const sidebarBackdrop = document.getElementById('sidebarBackdrop');
-                        const closeSidebarBtn = document.getElementById('closeSidebarBtn');
-                        function closeSidebar() {
-                            sidebarMenu.classList.remove('show');
-                            sidebarBackdrop.classList.remove('show');
-                        }
-                        menuBtn.addEventListener('click', function (e) {
-                            e.stopPropagation();
-                            sidebarMenu.classList.add('show');
-                            sidebarBackdrop.classList.add('show');
-                        });
-                        closeSidebarBtn.addEventListener('click', function (e) {
-                            e.stopPropagation();
-                            closeSidebar();
-                        });
-                        sidebarBackdrop.addEventListener('click', closeSidebar);
-                        document.addEventListener('keydown', function (e) {
-                            if (e.key === 'Escape') closeSidebar();
-                        });
+            // Firebase Google sign-in logic
+            const signInBtn = document.getElementById('signInBtn');
+            const signOutBtn = document.getElementById('signOutBtn');
+            let currentUser = null;
+            signInBtn.addEventListener('click', function () {
+                const provider = new firebase.auth.GoogleAuthProvider();
+                firebase.auth().signInWithPopup(provider)
+                    .then((result) => {
+                        currentUser = result.user;
+                        updateProfileUI();
+                    })
+                    .catch((error) => {
+                        alert('Sign-in failed: ' + error.message);
+                    });
+            });
+            signOutBtn.addEventListener('click', function () {
+                firebase.auth().signOut().then(() => {
+                    currentUser = null;
+                    updateProfileUI();
+                });
+            });
+            firebase.auth().onAuthStateChanged(function (user) {
+                currentUser = user;
+                updateProfileUI();
+            });
+            function updateProfileUI() {
+                if (currentUser) {
+                    document.getElementById('profileName').textContent = currentUser.displayName || 'Google User';
+                    document.getElementById('profileEmail').textContent = currentUser.email || '';
+                    signInBtn.style.display = 'none';
+                    signOutBtn.style.display = '';
+                } else {
+                    document.getElementById('profileName').textContent = 'Guest';
+                    document.getElementById('profileEmail').textContent = 'guest@example.com';
+                    signInBtn.style.display = '';
+                    signOutBtn.style.display = 'none';
+                }
+            }
+            // Home button logic
+            const goHomeBtn = document.getElementById('goHomeBtn');
+            goHomeBtn.addEventListener('click', function () {
+                mainContainer.style.display = '';
+                searchContainer.style.display = 'none';
+                closeSidebar();
+            });
+            // Sidebar menu open/close logic
+            const menuBtn = document.getElementById('menuBtn');
+            const sidebarMenu = document.getElementById('sidebarMenu');
+            const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+            const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+            function closeSidebar() {
+                sidebarMenu.classList.remove('show');
+                sidebarBackdrop.classList.remove('show');
+            }
+            menuBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                sidebarMenu.classList.add('show');
+                sidebarBackdrop.classList.add('show');
+            });
+            closeSidebarBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                closeSidebar();
+            });
+            sidebarBackdrop.addEventListener('click', closeSidebar);
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') closeSidebar();
+            });
             // ...existing code...
             // Right sidebar (heart menu) logic
             const openHeartMenuBtn = document.getElementById('openHeartMenu');
@@ -568,12 +685,22 @@
             // Sidebar navigation logic
             const openSearchPageBtn = document.getElementById('openSearchPage');
             const openConverterBtn = document.getElementById('openConverterBtn');
+            const profileBtn = document.getElementById('profileBtn');
             const mainContainer = document.getElementById('mainContainer');
             const searchContainer = document.getElementById('searchContainer');
+            const profileContainer = document.getElementById('profileContainer');
 
             openSearchPageBtn.addEventListener('click', function () {
                 mainContainer.style.display = 'none';
                 searchContainer.style.display = '';
+                profileContainer.style.display = 'none';
+                closeSidebar();
+            });
+
+            profileBtn.addEventListener('click', function () {
+                mainContainer.style.display = 'none';
+                searchContainer.style.display = 'none';
+                profileContainer.style.display = '';
                 closeSidebar();
             });
 
@@ -626,9 +753,439 @@
                 converterResult.textContent = `${value} ${from} = ${result.toFixed(2)} ${to}`;
             });
 
+            // Timer modal logic
+            const openTimerBtn = document.getElementById('openTimerBtn');
+            const timerModal = document.getElementById('timerModal');
+            const closeTimerModal = document.getElementById('closeTimerModal');
+            const timerForm = document.getElementById('timerForm');
+            const timerMinutes = document.getElementById('timerMinutes');
+            const timerDisplay = document.getElementById('timerDisplay');
+            let timerInterval = null;
+            let timerState = {
+                totalSeconds: null,
+                running: false
+            };
+
+            function saveTimerState() {
+                localStorage.setItem('timerState', JSON.stringify(timerState));
+            }
+            function loadTimerState() {
+                const state = localStorage.getItem('timerState');
+                if (state) {
+                    timerState = JSON.parse(state);
+                } else {
+                    timerState = { totalSeconds: null, running: false };
+                }
+            }
+            function clearTimerState() {
+                localStorage.removeItem('timerState');
+                timerState = { totalSeconds: null, running: false };
+            }
+
+            function updateTimerDisplay() {
+                if (timerState.totalSeconds !== null && timerState.totalSeconds >= 0) {
+                    let mins = Math.floor(timerState.totalSeconds / 60);
+                    let secs = timerState.totalSeconds % 60;
+                    timerDisplay.textContent = `${mins}:${secs.toString().padStart(2, '0')} remaining`;
+                    if (timerState.totalSeconds <= 0) {
+                        timerDisplay.textContent = 'Time is up!';
+                        timerState.running = false;
+                        saveTimerState();
+                        clearInterval(timerInterval);
+                    }
+                } else {
+                    timerDisplay.textContent = '';
+                }
+            }
+
+            function startTimer() {
+                clearInterval(timerInterval);
+                timerInterval = setInterval(function () {
+                    if (timerState.running && timerState.totalSeconds > 0) {
+                        timerState.totalSeconds--;
+                        updateTimerDisplay();
+                        saveTimerState();
+                    } else {
+                        clearInterval(timerInterval);
+                    }
+                }, 1000);
+            }
+
+            openTimerBtn.addEventListener('click', function () {
+                timerModal.classList.add('show');
+                loadTimerState();
+                if (timerState.totalSeconds !== null && timerState.running) {
+                    updateTimerDisplay();
+                    startTimer();
+                } else {
+                    timerDisplay.textContent = '';
+                    timerForm.reset();
+                }
+                closeSidebar();
+            });
+            closeTimerModal.addEventListener('click', function () {
+                timerModal.classList.remove('show');
+                saveTimerState();
+                clearInterval(timerInterval);
+            });
+            timerModal.addEventListener('click', function (e) {
+                if (e.target === timerModal) {
+                    timerModal.classList.remove('show');
+                    saveTimerState();
+                    clearInterval(timerInterval);
+                }
+            });
+            timerForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                let minutes = parseInt(timerMinutes.value);
+                if (isNaN(minutes) || minutes < 1) {
+                    timerDisplay.textContent = 'Please enter a valid time.';
+                    return;
+                }
+                timerState.totalSeconds = minutes * 60;
+                timerState.running = true;
+                saveTimerState();
+                updateTimerDisplay();
+                startTimer();
+            });
+            resetTimerBtn.addEventListener('click', function () {
+                clearInterval(timerInterval);
+                clearTimerState();
+                timerDisplay.textContent = '';
+                timerForm.reset();
+            });
             // Recipes and favorites logic
-            // ...existing recipes/favorites code...
-            // (Paste all recipes/favorites code here)
+            // Recipes array
+            const recipes = [
+                {
+                    title: "Gluten-Free Bagels",
+                    desc: "Chewy, delicious bagels made gluten-free.",
+                    ingredients: ["2 cups gluten-free flour", "1 tbsp sugar", "1 tsp yeast", "1 cup warm water", "1/2 tsp salt", "1 egg for brushing"],
+                    ovenTime: "20 minutes",
+                    ovenTemp: "220°C (425°F)",
+                    instructions: "Mix flour, sugar, yeast, water, and salt. Shape into bagels, boil briefly, brush with egg, bake for 20 minutes."
+                },
+                {
+                    title: "Gluten-Free Cinnamon Rolls",
+                    desc: "Soft, sweet cinnamon rolls with a gluten-free dough.",
+                    ingredients: ["2 cups gluten-free flour", "1/4 cup sugar", "1 tsp yeast", "1 cup warm milk", "1/4 cup butter", "1 egg", "Cinnamon filling", "Icing"],
+                    ovenTime: "25 minutes",
+                    ovenTemp: "180°C (355°F)",
+                    instructions: "Mix dough ingredients, let rise. Roll out, spread filling, roll up, slice. Bake for 25 minutes. Top with icing."
+                },
+                {
+                    title: "Gluten-Free Brownies",
+                    desc: "Fudgy brownies made with gluten-free flour.",
+                    ingredients: ["1 cup gluten-free flour", "1/2 cup cocoa powder", "1 cup sugar", "2 eggs", "1/2 cup butter", "1 tsp vanilla"],
+                    ovenTime: "25 minutes",
+                    ovenTemp: "180°C (355°F)",
+                    instructions: "Mix ingredients, pour into pan, bake for 25 minutes. Cool and cut."
+                },
+                {
+                    title: "Gluten-Free Scones",
+                    desc: "Tender scones perfect for tea time.",
+                    ingredients: ["2 cups gluten-free flour", "1/4 cup sugar", "1/2 cup butter", "1/2 cup milk", "1 egg", "1 tsp baking powder", "Dried fruit (optional)"],
+                    ovenTime: "15 minutes",
+                    ovenTemp: "200°C (400°F)",
+                    instructions: "Mix dry and wet ingredients, shape, bake for 15 minutes."
+                },
+                {
+                    title: "Gluten-Free Cupcakes",
+                    desc: "Moist cupcakes with gluten-free flour.",
+                    ingredients: ["1.5 cups gluten-free flour", "1/2 cup sugar", "2 eggs", "1/2 cup butter", "1/2 cup milk", "1 tsp baking powder", "Frosting"],
+                    ovenTime: "18 minutes",
+                    ovenTemp: "180°C (355°F)",
+                    instructions: "Mix ingredients, pour into cupcake liners, bake for 18 minutes. Cool and frost."
+                },
+                {
+                    title: "Gluten-Free Flatbread",
+                    desc: "Quick gluten-free flatbread for wraps or dipping.",
+                    ingredients: ["2 cups gluten-free flour", "1 cup water", "1 tbsp olive oil", "1/2 tsp salt"],
+                    ovenTime: "Cook 2-3 min per side",
+                    ovenTemp: "Hot skillet",
+                    instructions: "Mix ingredients, divide dough, roll out, cook in hot skillet until golden."
+                },
+                {
+                    title: "Gluten-Free Donuts",
+                    desc: "Baked donuts with a gluten-free batter.",
+                    ingredients: ["1.5 cups gluten-free flour", "1/2 cup sugar", "1/2 cup milk", "1/4 cup butter", "1 egg", "1 tsp baking powder", "Cinnamon sugar (optional)"],
+                    ovenTime: "12 minutes",
+                    ovenTemp: "180°C (355°F)",
+                    instructions: "Mix ingredients, pour into donut pan, bake for 12 minutes. Toss in cinnamon sugar if desired."
+                },
+                {
+                    title: "Gluten-Free Waffles",
+                    desc: "Crispy waffles made gluten-free.",
+                    ingredients: ["1.5 cups gluten-free flour", "1 tbsp sugar", "1 tsp baking powder", "1/2 tsp salt", "1 cup milk", "2 eggs", "2 tbsp melted butter"],
+                    ovenTime: "Cook in waffle iron",
+                    ovenTemp: "Waffle iron",
+                    instructions: "Mix ingredients, cook in preheated waffle iron until golden and crisp."
+                },
+                {
+                    title: "Gluten-Free Shortbread",
+                    desc: "Classic buttery shortbread cookies.",
+                    ingredients: ["2 cups gluten-free flour", "1 cup butter", "1/2 cup sugar", "1/2 tsp salt"],
+                    ovenTime: "15 minutes",
+                    ovenTemp: "180°C (355°F)",
+                    instructions: "Mix ingredients, shape, bake for 15 minutes. Cool and enjoy."
+                },
+                {
+                    title: "Gluten-Free Breadsticks",
+                    desc: "Soft, chewy breadsticks for dipping.",
+                    ingredients: ["2 cups gluten-free flour", "1 tsp yeast", "1 cup warm water", "1 tbsp olive oil", "1/2 tsp salt"],
+                    ovenTime: "18 minutes",
+                    ovenTemp: "220°C (425°F)",
+                    instructions: "Mix ingredients, shape into sticks, let rise, bake for 18 minutes."
+                },
+                {
+                    title: "Gluten-Free Banana Bread",
+                    desc: "Moist, delicious banana bread with no gluten.",
+                    ingredients: ["3 ripe bananas", "2 cups gluten-free flour", "1/2 cup sugar", "2 eggs", "1/4 cup oil", "1 tsp baking soda", "1/2 tsp salt"],
+                    ovenTime: "50 minutes",
+                    ovenTemp: "175°C (350°F)",
+                    instructions: "Mash bananas. Mix all ingredients. Pour into loaf pan. Bake for 50 minutes. Let cool before slicing."
+                },
+                {
+                    title: "Almond Flour Chocolate Cake",
+                    desc: "Rich chocolate cake made with almond flour.",
+                    ingredients: ["2 cups almond flour", "1/2 cup cocoa powder", "3/4 cup sugar", "3 eggs", "1/2 cup milk", "1/4 cup oil", "1 tsp baking powder"],
+                    ovenTime: "35 minutes",
+                    ovenTemp: "180°C (355°F)",
+                    instructions: "Mix dry and wet ingredients separately. Combine, pour into cake pan. Bake for 35 minutes. Cool and serve."
+                },
+                {
+                    title: "Oatmeal Raisin Cookies",
+                    desc: "Chewy cookies with gluten-free oats and raisins.",
+                    ingredients: ["2 cups gluten-free oats", "1 cup raisins", "1/2 cup butter", "1/2 cup sugar", "1 egg", "1 tsp cinnamon", "1/2 tsp baking soda"],
+                    ovenTime: "12 minutes",
+                    ovenTemp: "180°C (355°F)",
+                    instructions: "Mix all ingredients. Drop spoonfuls onto baking sheet. Bake for 12 minutes. Let cool."
+                },
+                {
+                    title: "Lemon Poppy Seed Muffins",
+                    desc: "Bright, zesty muffins perfect for breakfast.",
+                    ingredients: ["2 cups gluten-free flour", "1/2 cup sugar", "2 eggs", "1/2 cup oil", "1/4 cup lemon juice", "1 tbsp poppy seeds", "1 tsp baking powder"],
+                    ovenTime: "20 minutes",
+                    ovenTemp: "190°C (375°F)",
+                    instructions: "Mix ingredients. Pour into muffin tin. Bake for 20 minutes. Cool and enjoy."
+                },
+                {
+                    title: "Gluten-Free Pizza",
+                    desc: "Crispy gluten-free pizza crust with your favorite toppings.",
+                    ingredients: ["2 cups gluten-free flour", "1 tsp yeast", "1 cup warm water", "1 tbsp olive oil", "1/2 tsp salt", "Pizza sauce", "Cheese", "Toppings"],
+                    ovenTime: "18 minutes",
+                    ovenTemp: "220°C (425°F)",
+                    instructions: "Mix flour, yeast, water, oil, and salt. Let rise. Shape dough, add sauce, cheese, and toppings. Bake for 18 minutes."
+                },
+                {
+                    title: "Gluten-Free Pancakes",
+                    desc: "Fluffy pancakes made with gluten-free flour.",
+                    ingredients: ["1 cup gluten-free flour", "1 tbsp sugar", "1 tsp baking powder", "1/2 tsp salt", "1 cup milk", "1 egg", "2 tbsp melted butter"],
+                    ovenTime: "Cook 2-3 min per side",
+                    ovenTemp: "Medium skillet",
+                    instructions: "Mix dry and wet ingredients. Pour batter onto hot skillet. Cook until bubbles form, flip, cook until golden."
+                },
+                {
+                    title: "Gluten-Free Focaccia",
+                    desc: "Soft, herby gluten-free focaccia bread.",
+                    ingredients: ["2 cups gluten-free flour", "1 cup warm water", "1 tbsp olive oil", "1 tsp yeast", "1/2 tsp salt", "Rosemary", "Sea salt"],
+                    ovenTime: "25 minutes",
+                    ovenTemp: "200°C (400°F)",
+                    instructions: "Mix ingredients, let rise. Spread dough in pan, drizzle oil, add rosemary and sea salt. Bake for 25 minutes."
+                },
+                {
+                    title: "Gluten-Free Chocolate Chip Cookies",
+                    desc: "Classic chocolate chip cookies made gluten-free.",
+                    ingredients: ["2 cups gluten-free flour", "1 cup chocolate chips", "1/2 cup butter", "1/2 cup sugar", "1 egg", "1 tsp vanilla", "1/2 tsp baking soda"],
+                    ovenTime: "10 minutes",
+                    ovenTemp: "180°C (355°F)",
+                    instructions: "Mix ingredients. Drop spoonfuls onto baking sheet. Bake for 10 minutes. Let cool."
+                },
+                {
+                    title: "Gluten-Free Apple Crisp",
+                    desc: "Warm apple crisp with gluten-free oat topping.",
+                    ingredients: ["4 apples", "1 cup gluten-free oats", "1/2 cup brown sugar", "1/2 cup butter", "1/2 cup gluten-free flour", "1 tsp cinnamon"],
+                    ovenTime: "40 minutes",
+                    ovenTemp: "180°C (355°F)",
+                    instructions: "Slice apples, mix topping ingredients. Layer apples in dish, add topping. Bake for 40 minutes."
+                },
+                {
+                    title: "Gluten-Free Carrot Cake",
+                    desc: "Moist carrot cake with cream cheese frosting.",
+                    ingredients: ["2 cups gluten-free flour", "2 cups grated carrots", "1 cup sugar", "2 eggs", "1/2 cup oil", "1 tsp cinnamon", "1/2 tsp baking soda", "Cream cheese frosting"],
+                    ovenTime: "35 minutes",
+                    ovenTemp: "180°C (355°F)",
+                    instructions: "Mix ingredients. Pour into cake pan. Bake for 35 minutes. Cool and frost."
+                }
+            ];
+
+            // Favorites array
+            let favorites = [];
+            // Firestore reference
+            const db = firebase.firestore();
+
+            function saveFavoritesToCloud() {
+                if (currentUser) {
+                    db.collection('users').doc(currentUser.uid).set({
+                        favorites: favorites.map(r => r.title)
+                    }, { merge: true });
+                }
+            }
+
+            function loadFavoritesFromCloud() {
+                if (currentUser) {
+                    db.collection('users').doc(currentUser.uid).get().then(doc => {
+                        if (doc.exists && doc.data().favorites) {
+                            favorites = recipes.filter(r => doc.data().favorites.includes(r.title));
+                            updateFavoritesSidebar();
+                        }
+                    });
+                }
+            }
+
+            // Update favorites when user changes
+            firebase.auth().onAuthStateChanged(function (user) {
+                currentUser = user;
+                updateProfileUI();
+                if (currentUser) {
+                    loadFavoritesFromCloud();
+                } else {
+                    favorites = [];
+                    updateFavoritesSidebar();
+                }
+            });
+
+            // Recipe modal logic
+            function showRecipeModal(recipe) {
+                // Create modal
+                let modal = document.createElement('div');
+                modal.className = 'modal-converter show';
+                modal.style.zIndex = 4000;
+                modal.innerHTML = `
+                    <div class="modal-content" style="font-size:1.25rem;line-height:1.7;">
+                        <button class="modal-close-btn" aria-label="Close recipe">&times;</button>
+                        <h2 style="font-size:2rem;margin-bottom:0.7rem;">${recipe.title}</h2>
+                        <p style="color:#888;margin-bottom:1rem;font-size:1.15rem;">${recipe.desc}</p>
+                        <strong style="font-size:1.2rem;">Ingredients:</strong>
+                        <ul style="margin-bottom:1rem;font-size:1.15rem;">${recipe.ingredients.map(i => `<li>${i}</li>`).join('')}</ul>
+                        <strong style="font-size:1.2rem;">Bake:</strong> <span style="font-size:1.15rem;">${recipe.ovenTime} at ${recipe.ovenTemp}</span><br><br>
+                        <strong style="font-size:1.2rem;">Instructions:</strong>
+                        <p style="font-size:1.25rem;line-height:1.7;">${recipe.instructions}</p>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+                // Close modal
+                modal.querySelector('.modal-close-btn').addEventListener('click', function () {
+                    modal.remove();
+                });
+                // Heart icon logic
+                modal.querySelector('.heart-icon-btn').addEventListener('click', function () {
+                    if (favorites.includes(recipe)) {
+                        favorites = favorites.filter(f => f !== recipe);
+                    } else {
+                        favorites.push(recipe);
+                    }
+                    updateFavoritesSidebar();
+                    saveFavoritesToCloud();
+                    modal.remove();
+                });
+                // Close modal on backdrop click
+                modal.addEventListener('click', function (e) {
+                    if (e.target === modal) modal.remove();
+                });
+            }
+
+            // Display recipes in search page
+            const recipeList = document.getElementById('recipeList');
+            function displayRecipes(recipesToShow) {
+                recipeList.innerHTML = '';
+                recipesToShow.forEach(recipe => {
+                    const li = document.createElement('li');
+                    li.style.listStyle = 'none';
+                    li.style.padding = '1rem';
+                    li.style.borderBottom = '1px solid #eee';
+                    li.style.display = 'flex';
+                    li.style.justifyContent = 'space-between';
+                    li.style.alignItems = 'center';
+                    li.innerHTML = `
+                        <span style="font-weight:bold;color:#4a7c59;cursor:pointer;">${recipe.title}</span>
+                        <button class="heart-icon-btn" style="background:none;border:none;" aria-label="Add to favorites">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 21s-6.2-5.2-8.4-8.1C1.2 10.1 2.1 7 5 6.2c1.7-.5 3.4.3 4.4 1.7C10.9 9.1 11.5 9 12 9s1.1.1 2.6-1.1c1-1.4 2.7-2.2 4.4-1.7 2.9.8 3.8 3.9 1.4 6.7C18.2 15.8 12 21 12 21z" fill="${favorites.includes(recipe) ? '#4a7c59' : '#fff'}" stroke="#4a7c59" stroke-width="1.5" />
+                            </svg>
+                        </button>
+                    `;
+                    // Recipe click
+                    li.querySelector('span').addEventListener('click', function () {
+                        showRecipeModal(recipe);
+                    });
+                    // Heart icon click
+                    li.querySelector('.heart-icon-btn').addEventListener('click', function () {
+                        if (favorites.includes(recipe)) {
+                            favorites = favorites.filter(f => f !== recipe);
+                        } else {
+                            favorites.push(recipe);
+                        }
+                        updateFavoritesSidebar();
+                        displayRecipes(filteredRecipes());
+                    });
+                    recipeList.appendChild(li);
+                });
+            }
+
+            // Search bar logic
+            const searchBar = document.getElementById('searchBar');
+            function filteredRecipes() {
+                const query = searchBar.value.trim().toLowerCase();
+                if (!query) return recipes;
+                return recipes.filter(r => r.title.toLowerCase().includes(query) || r.desc.toLowerCase().includes(query));
+            }
+            searchBar.addEventListener('input', function () {
+                displayRecipes(filteredRecipes());
+            });
+            // Initial display
+            displayRecipes(recipes);
+
+            // Favorites sidebar logic
+            function updateFavoritesSidebar() {
+                const sidebar = document.getElementById('rightSidebarMenu');
+                // Remove old list
+                let oldList = sidebar.querySelector('.favorites-list');
+                if (oldList) oldList.remove();
+                // Add new list
+                if (favorites.length === 0) return;
+                const ul = document.createElement('ul');
+                ul.className = 'favorites-list';
+                ul.style.padding = '1rem';
+                ul.style.margin = 0;
+                favorites.forEach(recipe => {
+                    const li = document.createElement('li');
+                    li.style.listStyle = 'none';
+                    li.style.padding = '0.7rem';
+                    li.style.borderBottom = '1px solid #eee';
+                    li.style.display = 'flex';
+                    li.style.justifyContent = 'space-between';
+                    li.style.alignItems = 'center';
+                    li.innerHTML = `
+                        <span style="font-weight:bold;color:#4a7c59;cursor:pointer;">${recipe.title}</span>
+                        <button class="heart-icon-btn" style="background:none;border:none;" aria-label="Remove from favorites">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 21s-6.2-5.2-8.4-8.1C1.2 10.1 2.1 7 5 6.2c1.7-.5 3.4.3 4.4 1.7C10.9 9.1 11.5 9 12 9s1.1.1 2.6-1.1c1-1.4 2.7-2.2 4.4-1.7 2.9.8 3.8 3.9 1.4 6.7C18.2 15.8 12 21 12 21z" fill="#4a7c59" stroke="#4a7c59" stroke-width="1.5" />
+                            </svg>
+                        </button>
+                    `;
+                    li.querySelector('span').addEventListener('click', function () {
+                        showRecipeModal(recipe);
+                    });
+                    li.querySelector('.heart-icon-btn').addEventListener('click', function () {
+                        favorites = favorites.filter(f => f !== recipe);
+                        updateFavoritesSidebar();
+                        displayRecipes(filteredRecipes());
+                    });
+                    ul.appendChild(li);
+                });
+                sidebar.appendChild(ul);
+            }
         });
     </script>
 </body>
