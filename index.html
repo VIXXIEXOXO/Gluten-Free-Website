@@ -1120,7 +1120,7 @@
                     <div class="modal-content" style="font-size:1.25rem;line-height:1.7;">
                         <button class="modal-close-btn" aria-label="Close recipe">&times;</button>
                         <h2 style="font-size:2rem;margin-bottom:0.7rem;">${recipe.title}</h2>
-                        <p style="color:#888;margin-bottom:1rem;font-size:1.15rem;">${recipe.desc}</p>
+                        <p style="color:#888;margin-bottom:1rem;font-size:1.15rem;text-align:center;">${recipe.desc}</p>
                         <strong style="font-size:1.2rem;">Ingredients:</strong>
                         <ul style="margin-bottom:1rem;font-size:1.15rem;">${recipe.ingredients.map(i => `<li>${i}</li>`).join('')}</ul>
                         <strong style="font-size:1.2rem;">Bake:</strong> <span style="font-size:1.15rem;">${recipe.ovenTime} at ${recipe.ovenTemp}</span><br><br>
