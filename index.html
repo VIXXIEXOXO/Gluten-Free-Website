@@ -6,6 +6,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gluten-Free Baking Recipes</title>
     <style>
+        /* Calculator modal and form styling to match others */
+        #calculatorModal .modal-content {
+            background: #fff;
+            border-radius: 1.2rem;
+            padding: 2rem 1.5rem 1.5rem 1.5rem;
+            max-width: 95vw;
+            width: 350px;
+            position: relative;
+        }
+
+        #calculatorModal h2 {
+            color: #4a7c59;
+            font-size: 1.3rem;
+            text-align: center;
+            margin-top: 0;
+        }
+
+        #calculatorForm {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        #calcDisplay {
+            width: 220px;
+            font-size: 1.15rem;
+            text-align: right;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #ccc;
+            background: #f8f8f8;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .calc-btn {
+            background: #eaf6ee;
+            color: #4a7c59;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.7rem;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .calc-btn:hover {
+            background: #6ab187;
+            color: #fff;
+        }
+
+        .calc-btn[data-value="="] {
+            background: #4a7c59;
+            color: #fff;
+            grid-column: span 4;
+        }
+
+        .calc-btn[data-value="="]:hover {
+            background: #388e5c;
+        }
+
+        @media (min-width: 800px) {
+            #calculatorModal .modal-content {
+                width: 500px;
+                min-width: 400px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            #calculatorModal .modal-content {
+                padding: 1rem 0.5rem 1rem 0.5rem;
+                width: 98vw;
+            }
+
+            #calcDisplay {
+                width: 98vw;
+            }
+        }
+
         /* Right sidebar (heart menu) styles */
         .right-sidebar-menu {
             position: fixed;
@@ -417,6 +497,37 @@
             </div>
         </div>
     </div>
+    <!-- Calculator Modal -->
+    <div class="modal-converter" id="calculatorModal">
+        <div class="modal-content">
+            <button class="modal-close-btn" id="closeCalculatorModal" aria-label="Close calculator">&times;</button>
+            <h2>Calculator</h2>
+            <form id="calculatorForm" style="display:flex;flex-direction:column;gap:1rem;align-items:center;">
+                <input type="text" id="calcDisplay" readonly
+                    style="width:220px;font-size:1.3rem;text-align:right;padding:0.5rem;border-radius:0.5rem;border:1px solid #ccc;" />
+                <div style="display:grid;grid-template-columns:repeat(4,50px);gap:0.5rem;">
+                    <button type="button" class="calc-btn" data-value="7">7</button>
+                    <button type="button" class="calc-btn" data-value="8">8</button>
+                    <button type="button" class="calc-btn" data-value="9">9</button>
+                    <button type="button" class="calc-btn" data-value="/">÷</button>
+                    <button type="button" class="calc-btn" data-value="4">4</button>
+                    <button type="button" class="calc-btn" data-value="5">5</button>
+                    <button type="button" class="calc-btn" data-value="6">6</button>
+                    <button type="button" class="calc-btn" data-value="*">×</button>
+                    <button type="button" class="calc-btn" data-value="1">1</button>
+                    <button type="button" class="calc-btn" data-value="2">2</button>
+                    <button type="button" class="calc-btn" data-value="3">3</button>
+                    <button type="button" class="calc-btn" data-value="-">−</button>
+                    <button type="button" class="calc-btn" data-value="0">0</button>
+                    <button type="button" class="calc-btn" data-value=".">.</button>
+                    <button type="button" class="calc-btn" data-value="C">C</button>
+                    <button type="button" class="calc-btn" data-value="+">+</button>
+                    <button type="button" class="calc-btn" data-value="="
+                        style="grid-column:span 4;background:#4a7c59;color:#fff;">=</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="modal-converter" id="timerModal">
         <div class="modal-content">
             <button class="modal-close-btn" id="closeTimerModal" aria-label="Close timer">&times;</button>
@@ -506,6 +617,21 @@
                         <path d="M20 17H8l3 3" stroke="#4a7c59" stroke-width="2" fill="none" />
                     </svg>
                     Convert
+                </button>
+                <button type="button" id="openCalculatorBtn">
+                    <!-- Calculator icon SVG -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        style="vertical-align:middle;margin-right:8px;">
+                        <rect x="4" y="3" width="16" height="18" rx="2" stroke="#4a7c59" stroke-width="2" fill="none" />
+                        <rect x="7" y="6" width="10" height="3" rx="1" fill="#4a7c59" />
+                        <rect x="7" y="11" width="3" height="3" rx="1" fill="#4a7c59" />
+                        <rect x="11" y="11" width="3" height="3" rx="1" fill="#4a7c59" />
+                        <rect x="15" y="11" width="3" height="3" rx="1" fill="#4a7c59" />
+                        <rect x="7" y="15" width="3" height="3" rx="1" fill="#4a7c59" />
+                        <rect x="11" y="15" width="3" height="3" rx="1" fill="#4a7c59" />
+                        <rect x="15" y="15" width="3" height="3" rx="1" fill="#4a7c59" />
+                    </svg>
+                    Calculator
                 </button>
                 <button type="button" id="openNotesBtn">
                     <!-- Notes icon SVG (notepad) -->
@@ -670,11 +796,65 @@
 
             // Sidebar navigation logic
             const openConverterBtn = document.getElementById('openConverterBtn');
+            const openCalculatorBtn = document.getElementById('openCalculatorBtn');
+            const calculatorModal = document.getElementById('calculatorModal');
+            const closeCalculatorModal = document.getElementById('closeCalculatorModal');
             const mainContainer = document.getElementById('mainContainer');
             const searchContainer = document.getElementById('searchContainer');
             // Make search the starter page
             mainContainer.style.display = 'none';
             searchContainer.style.display = '';
+
+            // Calculator modal logic
+            // Calculator functionality
+            const calcDisplay = document.getElementById('calcDisplay');
+            const calculatorForm = document.getElementById('calculatorForm');
+            let calcValue = '';
+            function updateCalcDisplay() {
+                calcDisplay.value = calcValue;
+            }
+            calculatorForm.addEventListener('click', function (e) {
+                if (e.target.classList.contains('calc-btn')) {
+                    const val = e.target.getAttribute('data-value');
+                    if (val === 'C') {
+                        calcValue = '';
+                        updateCalcDisplay();
+                    } else if (val === '=') {
+                        try {
+                            // Replace division and multiplication symbols for eval
+                            let expr = calcValue.replace(/÷/g, '/').replace(/×/g, '*').replace(/−/g, '-');
+                            // Only allow numbers and operators
+                            if (/^[0-9+\-*/. ]+$/.test(expr)) {
+                                calcValue = eval(expr).toString();
+                            } else {
+                                calcValue = 'Err';
+                            }
+                        } catch {
+                            calcValue = 'Err';
+                        }
+                        updateCalcDisplay();
+                    } else {
+                        if (calcValue === 'Err') calcValue = '';
+                        calcValue += val;
+                        updateCalcDisplay();
+                    }
+                }
+                e.preventDefault();
+            });
+            // Initialize display
+            updateCalcDisplay();
+            openCalculatorBtn.addEventListener('click', function () {
+                calculatorModal.classList.add('show');
+                closeSidebar();
+            });
+            closeCalculatorModal.addEventListener('click', function () {
+                calculatorModal.classList.remove('show');
+            });
+            calculatorModal.addEventListener('click', function (e) {
+                if (e.target === calculatorModal) {
+                    calculatorModal.classList.remove('show');
+                }
+            });
 
             // Converter modal logic
             const converterModal = document.getElementById('converterModal');
