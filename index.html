@@ -527,7 +527,7 @@
                     <button type="button" class="calc-btn" data-value="C">C</button>
                     <button type="button" class="calc-btn" data-value="+">+</button>
                     <button type="button" class="calc-btn" data-value="="
-                        style="grid-column:span 4;background:#6ab187;color:#fff;">=</button>
+                        style="grid-column:span 4;background:#6ab187;color:#fff;margin-top:1rem;">=</button>
                 </div>
             </form>
         </div>
@@ -681,7 +681,7 @@
     <div class="container" id="mainContainer">
         <!-- Main container removed, starter page is search -->
     </div>
-    <div class="container" id="searchContainer" style="display:none;">
+    <div class="container" id="searchContainer">
         <div id="categoryFilter"
             style="margin-bottom:2vw;display:flex;flex-wrap:wrap;gap:0.5rem;justify-content:center;">
             <button class="category-btn" data-category="all"
@@ -1344,6 +1344,16 @@
                 recipeList.innerHTML = '';
                 // Sort recipes alphabetically by title
                 recipesToShow.sort((a, b) => a.title.localeCompare(b.title));
+                if (recipesToShow.length === 0) {
+                    const msg = document.createElement('li');
+                    msg.style.listStyle = 'none';
+                    msg.style.padding = '2rem';
+                    msg.style.textAlign = 'center';
+                    msg.style.color = '#888';
+                    msg.textContent = 'No recipes found.';
+                    recipeList.appendChild(msg);
+                    return;
+                }
                 recipesToShow.forEach(recipe => {
                     const li = document.createElement('li');
                     li.style.listStyle = 'none';
