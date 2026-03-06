@@ -603,6 +603,15 @@
             </div>
             <div class="sidebar-menu-list">
                 <!-- Home button removed -->
+                <button type="button" id="openSearchBtn">
+                    <!-- Search icon SVG -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        style="vertical-align:middle;margin-right:8px;">
+                        <circle cx="11" cy="11" r="8" stroke="#4a7c59" stroke-width="2" fill="none" />
+                        <line x1="18" y1="18" x2="22" y2="22" stroke="#4a7c59" stroke-width="2" />
+                    </svg>
+                    Search
+                </button>
                 <button type="button" id="openTimerBtn">
                     <!-- Timer icon SVG -->
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -714,7 +723,7 @@
             <!-- Recipes will appear here -->
         </ul>
     </div>
-    <div class="container" id="profileContainer" style="display:none;max-width:400px;margin:4vw auto;">
+    <div class="container" id="profileContainer" style="display:none;width:92vw;max-width:800px;margin:4vw auto;">
         <h2 style="color:#4a7c59;text-align:center;margin-bottom:1.2rem;">User Account</h2>
         <div id="authForms">
             <form id="registerForm" style="margin-bottom:2rem;">
@@ -738,8 +747,76 @@
                 <div id="loginMsg" style="color:#e57373;margin-top:0.5rem;font-size:1rem;"></div>
             </form>
         </div>
-        <div id="profileInfo" style="display:none;text-align:center;">
-            <p id="profileEmail" style="font-size:1.1rem;color:#4a7c59;"></p>
+        <div id="profileInfo" style="display:none;text-align:center;position:relative;">
+            <!-- Banner with customization -->
+            <div id="profileBanner"
+                style="width:100%;height:90px;background:#eaf6ee;border-radius:1rem 1rem 0 0;margin-bottom:0.5rem;position:relative;">
+                <button id="openSettingsBtn"
+                    style="position:absolute;top:1rem;left:1rem;background:none;border:none;cursor:pointer;">
+                    <!-- Settings icon SVG -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        style="vertical-align:middle;margin-right:8px;">
+                        <circle cx="12" cy="12" r="5" stroke="#4a7c59" stroke-width="2" fill="none" />
+                        <path
+                            d="M12 2v2M12 20v2M2 12h2M20 12h2M5.64 5.64l1.41 1.41M16.95 16.95l1.41 1.41M5.64 18.36l1.41-1.41M16.95 7.05l1.41-1.41"
+                            stroke="#4a7c59" stroke-width="2" stroke-linecap="round" />
+                        <circle cx="12" cy="12" r="10" stroke="#4a7c59" stroke-width="2" fill="none" />
+                    </svg>
+                </button>
+                <!-- Profile picture -->
+                <img id="profilePic" src="https://www.gravatar.com/avatar?d=mp&s=80" alt="Profile Picture"
+                    style="width:80px;height:80px;border-radius:50%;border:3px solid #6ab187;position:absolute;left:50%;transform:translateX(-50%) translateY(30px);background:#fff;">
+                <div style="position:absolute;right:1rem;top:1rem;">
+                    <label for="bannerColor" style="color:#4a7c59;font-size:0.9rem;">Banner:</label>
+                    <input type="color" id="bannerColor" value="#eaf6ee" style="width:32px;height:32px;border:none;">
+                </div>
+            </div>
+            <!-- Settings Modal -->
+            <div id="settingsModal"
+                style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.18);z-index:5000;align-items:center;justify-content:center;">
+                <div
+                    style="background:#fff;padding:2rem 1.5rem 1.5rem 1.5rem;border-radius:1.2rem;max-width:95vw;width:350px;position:relative;">
+                    <button id="closeSettingsBtn"
+                        style="position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.5rem;color:#4a7c59;cursor:pointer;">&times;</button>
+                    <h2 style="color:#4a7c59;text-align:center;margin-bottom:1.2rem;">Profile Customization</h2>
+                    <form id="picUploadForm" style="margin-bottom:1rem;text-align:left;">
+                        <label style="color:#4a7c59;font-size:1rem;">Profile Picture:</label><br>
+                        <input type="file" id="picUpload" accept="image/*"
+                            style="display:inline-block;margin-top:0.5rem;">
+                        <button type="submit"
+                            style="background:#6ab187;color:#fff;border:none;padding:0.3rem 0.8rem;border-radius:0.5rem;font-size:0.9rem;cursor:pointer;margin-left:0.5rem;">Upload</button>
+                    </form>
+                    <div style="margin-bottom:1rem;text-align:left;">
+                        <label for="bannerColor" style="color:#4a7c59;font-size:1rem;">Banner Color:</label>
+                        <input type="color" id="bannerColor" value="#eaf6ee"
+                            style="width:32px;height:32px;border:none;margin-left:0.5rem;">
+                    </div>
+                    <form id="displayNameForm" style="margin-bottom:1rem;text-align:left;">
+                        <label style="color:#4a7c59;font-size:1rem;">Display Name:</label><br>
+                        <input type="text" id="displayNameInput" placeholder="Display Name"
+                            style="font-size:1.1rem;padding:0.4rem 1rem;border-radius:0.5rem;border:1px solid #6ab187;width:180px;margin-top:0.5rem;">
+                        <button type="submit"
+                            style="background:#6ab187;color:#fff;border:none;padding:0.4rem 1rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;margin-left:0.5rem;">Save</button>
+                    </form>
+                </div>
+            </div>
+            <p id="profileEmail" style="font-size:1.1rem;color:#4a7c59;margin-bottom:1.2rem;"></p>
+            <div style="margin-bottom:1.5rem;">
+                <button id="favoritesBtn"
+                    style="background:#6ab187;color:#fff;border:none;padding:0.7rem 1.5rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;margin:0.5rem 0;">Favorite
+                    Recipes</button>
+                <button id="postRecipeBtn"
+                    style="background:#4a7c59;color:#fff;border:none;padding:0.7rem 1.5rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;margin:0.5rem 0;">Post
+                    a Recipe</button>
+            </div>
+            <div style="margin-bottom:1.5rem;">
+                <strong style="color:#4a7c59;">Your Features:</strong>
+                <ul style="list-style:none;padding:0;margin:0;font-size:1rem;color:#555;">
+                    <li>✔️ Save favorite recipes</li>
+                    <li>✔️ Rate recipes (coming soon)</li>
+                    <li>✔️ Personal notes (coming soon)</li>
+                </ul>
+            </div>
             <button id="logoutBtn"
                 style="background:#e57373;color:#fff;border:none;padding:0.7rem 1.5rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;margin-top:1rem;">Logout</button>
         </div>
@@ -761,7 +838,51 @@
             const profileInfo = document.getElementById('profileInfo');
             const profileEmail = document.getElementById('profileEmail');
             const logoutBtn = document.getElementById('logoutBtn');
+            const profilePic = document.getElementById('profilePic');
+            const picUploadForm = document.getElementById('picUploadForm');
+            const picUpload = document.getElementById('picUpload');
+            const bannerColor = document.getElementById('bannerColor');
+            const profileBanner = document.getElementById('profileBanner');
+            const displayNameForm = document.getElementById('displayNameForm');
+            const displayNameInput = document.getElementById('displayNameInput');
             let currentUser = null;
+            // Profile customization logic in settings modal
+            const openSettingsBtn = document.getElementById('openSettingsBtn');
+            const settingsModal = document.getElementById('settingsModal');
+            const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+            openSettingsBtn.addEventListener('click', function () {
+                settingsModal.style.display = 'flex';
+            });
+            closeSettingsBtn.addEventListener('click', function () {
+                settingsModal.style.display = 'none';
+            });
+            settingsModal.addEventListener('click', function (e) {
+                if (e.target === settingsModal) settingsModal.style.display = 'none';
+            });
+            picUploadForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                const file = picUpload.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (ev) {
+                        profilePic.src = ev.target.result;
+                        settingsModal.style.display = 'none';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            bannerColor.addEventListener('input', function () {
+                profileBanner.style.background = bannerColor.value;
+            });
+            displayNameForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                const name = displayNameInput.value.trim();
+                if (name) {
+                    displayNameInput.value = name;
+                    displayNameInput.style.background = '#eaf6ee';
+                    settingsModal.style.display = 'none';
+                }
+            });
 
             // Show profile container (for demo, you can add a menu button to open it)
             // Uncomment below to show profile on page load for testing:
@@ -776,6 +897,9 @@
                         registerMsg.style.color = '#4a7c59';
                         registerMsg.textContent = 'Registration successful!';
                         registerForm.reset();
+                        authForms.style.display = 'none';
+                        profileInfo.style.display = '';
+                        profileEmail.textContent = 'Logged in as: ' + userCredential.user.email;
                     })
                     .catch(error => {
                         registerMsg.style.color = '#e57373';
@@ -909,6 +1033,12 @@
 
             // Sidebar navigation logic
             const openProfileBtn = document.getElementById('openProfileBtn');
+            openSearchBtn.addEventListener('click', function () {
+                searchContainer.style.display = '';
+                profileContainer.style.display = 'none';
+                mainContainer.style.display = 'none';
+                closeSidebar();
+            });
             openProfileBtn.addEventListener('click', function () {
                 profileContainer.style.display = '';
                 mainContainer.style.display = 'none';
