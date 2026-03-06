@@ -648,7 +648,15 @@
                     </svg>
                     Notes
                 </button>
-                <!-- Profile button removed -->
+                <button type="button" id="openProfileBtn">
+                    <!-- User icon SVG -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        style="vertical-align:middle;margin-right:8px;">
+                        <circle cx="12" cy="8" r="4" stroke="#4a7c59" stroke-width="2" fill="none" />
+                        <rect x="4" y="16" width="16" height="4" rx="2" stroke="#4a7c59" stroke-width="2" fill="none" />
+                    </svg>
+                    Profile
+                </button>
             </div>
         </nav>
         <button class="header-icon heart-icon" aria-label="Favorites" id="openHeartMenu">
@@ -706,12 +714,113 @@
             <!-- Recipes will appear here -->
         </ul>
     </div>
-    <div class="container" id="profileContainer" style="display:none;">
-        <!-- Profile section removed -->
+    <div class="container" id="profileContainer" style="display:none;max-width:400px;margin:4vw auto;">
+        <h2 style="color:#4a7c59;text-align:center;margin-bottom:1.2rem;">User Account</h2>
+        <div id="authForms">
+            <form id="registerForm" style="margin-bottom:2rem;">
+                <h3 style="color:#4a7c59;">Register</h3>
+                <input type="email" id="registerEmail" placeholder="Email" required
+                    style="width:100%;margin-bottom:0.7rem;padding:0.5rem;border-radius:0.5rem;border:1px solid #6ab187;">
+                <input type="password" id="registerPassword" placeholder="Password" required
+                    style="width:100%;margin-bottom:0.7rem;padding:0.5rem;border-radius:0.5rem;border:1px solid #6ab187;">
+                <button type="submit"
+                    style="background:#6ab187;color:#fff;border:none;padding:0.7rem 1.5rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;width:100%;">Register</button>
+                <div id="registerMsg" style="color:#e57373;margin-top:0.5rem;font-size:1rem;"></div>
+            </form>
+            <form id="loginForm">
+                <h3 style="color:#4a7c59;">Login</h3>
+                <input type="email" id="loginEmail" placeholder="Email" required
+                    style="width:100%;margin-bottom:0.7rem;padding:0.5rem;border-radius:0.5rem;border:1px solid #6ab187;">
+                <input type="password" id="loginPassword" placeholder="Password" required
+                    style="width:100%;margin-bottom:0.7rem;padding:0.5rem;border-radius:0.5rem;border:1px solid #6ab187;">
+                <button type="submit"
+                    style="background:#6ab187;color:#fff;border:none;padding:0.7rem 1.5rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;width:100%;">Login</button>
+                <div id="loginMsg" style="color:#e57373;margin-top:0.5rem;font-size:1rem;"></div>
+            </form>
+        </div>
+        <div id="profileInfo" style="display:none;text-align:center;">
+            <p id="profileEmail" style="font-size:1.1rem;color:#4a7c59;"></p>
+            <button id="logoutBtn"
+                style="background:#e57373;color:#fff;border:none;padding:0.7rem 1.5rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;margin-top:1rem;">Logout</button>
+        </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // ...existing code...
+            // Profile/account logic
+            const profileContainer = document.getElementById('profileContainer');
+            const authForms = document.getElementById('authForms');
+            const registerForm = document.getElementById('registerForm');
+            const registerEmail = document.getElementById('registerEmail');
+            const registerPassword = document.getElementById('registerPassword');
+            const registerMsg = document.getElementById('registerMsg');
+            const loginForm = document.getElementById('loginForm');
+            const loginEmail = document.getElementById('loginEmail');
+            const loginPassword = document.getElementById('loginPassword');
+            const loginMsg = document.getElementById('loginMsg');
+            const profileInfo = document.getElementById('profileInfo');
+            const profileEmail = document.getElementById('profileEmail');
+            const logoutBtn = document.getElementById('logoutBtn');
+            let currentUser = null;
+
+            // Show profile container (for demo, you can add a menu button to open it)
+            // Uncomment below to show profile on page load for testing:
+            // profileContainer.style.display = '';
+
+            // Register
+            registerForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                registerMsg.textContent = '';
+                firebase.auth().createUserWithEmailAndPassword(registerEmail.value, registerPassword.value)
+                    .then(userCredential => {
+                        registerMsg.style.color = '#4a7c59';
+                        registerMsg.textContent = 'Registration successful!';
+                        registerForm.reset();
+                    })
+                    .catch(error => {
+                        registerMsg.style.color = '#e57373';
+                        registerMsg.textContent = error.message;
+                    });
+            });
+
+            // Login
+            loginForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                loginMsg.textContent = '';
+                firebase.auth().signInWithEmailAndPassword(loginEmail.value, loginPassword.value)
+                    .then(userCredential => {
+                        loginMsg.style.color = '#4a7c59';
+                        loginMsg.textContent = 'Login successful!';
+                        loginForm.reset();
+                    })
+                    .catch(error => {
+                        loginMsg.style.color = '#e57373';
+                        loginMsg.textContent = error.message;
+                    });
+            });
+
+            // Logout
+            logoutBtn.addEventListener('click', function () {
+                firebase.auth().signOut();
+            });
+
+            // Update UI on auth state change
+            function updateProfileUI() {
+                currentUser = firebase.auth().currentUser;
+                if (currentUser) {
+                    authForms.style.display = 'none';
+                    profileInfo.style.display = '';
+                    profileEmail.textContent = 'Logged in as: ' + currentUser.email;
+                    profileContainer.style.display = '';
+                } else {
+                    authForms.style.display = '';
+                    profileInfo.style.display = 'none';
+                    profileEmail.textContent = '';
+                    // Hide profile container unless user opens it
+                    // profileContainer.style.display = 'none';
+                }
+            }
+            firebase.auth().onAuthStateChanged(updateProfileUI);
             // Notes modal logic
             const openNotesBtn = document.getElementById('openNotesBtn');
             const notesModal = document.getElementById('notesModal');
@@ -799,6 +908,13 @@
             });
 
             // Sidebar navigation logic
+            const openProfileBtn = document.getElementById('openProfileBtn');
+            openProfileBtn.addEventListener('click', function () {
+                profileContainer.style.display = '';
+                mainContainer.style.display = 'none';
+                searchContainer.style.display = 'none';
+                closeSidebar();
+            });
             const openConverterBtn = document.getElementById('openConverterBtn');
             const openCalculatorBtn = document.getElementById('openCalculatorBtn');
             const calculatorModal = document.getElementById('calculatorModal');
@@ -1024,6 +1140,78 @@
                     ovenTime: "20 minutes",
                     ovenTemp: "180°C (355°F)",
                     instructions: "Mix dry and wet ingredients separately. Combine, pour into muffin tin. Bake for 20 minutes. Cool and enjoy."
+                },
+                {
+                    title: "Gluten-Free Spinach Quiche",
+                    desc: "Savory quiche with spinach and cheese in a gluten-free crust.",
+                    ingredients: ["1 gluten-free pie crust", "2 cups spinach", "1 cup shredded cheese", "4 eggs", "1 cup milk", "1/2 tsp salt", "1/4 tsp pepper"],
+                    ovenTime: "35 minutes",
+                    ovenTemp: "180°C (355°F)",
+                    instructions: "Spread spinach in crust, mix eggs, milk, cheese, salt, pepper. Pour over spinach. Bake for 35 minutes."
+                },
+                {
+                    title: "Gluten-Free Chicken Pot Pie",
+                    desc: "Classic comfort food with a gluten-free crust.",
+                    ingredients: ["1 gluten-free pie crust", "2 cups cooked chicken", "1 cup mixed vegetables", "1 cup chicken broth", "1/2 cup milk", "2 tbsp gluten-free flour", "Salt & pepper"],
+                    ovenTime: "40 minutes",
+                    ovenTemp: "190°C (375°F)",
+                    instructions: "Cook chicken and vegetables, add flour, broth, milk, season. Fill crust, cover, bake for 40 minutes."
+                },
+                {
+                    title: "Gluten-Free Falafel",
+                    desc: "Crispy chickpea patties, perfect for wraps or salads.",
+                    ingredients: ["2 cups chickpeas", "1/2 onion", "2 cloves garlic", "1/4 cup parsley", "2 tbsp gluten-free flour", "1 tsp cumin", "Salt & pepper"],
+                    ovenTime: "20 minutes",
+                    ovenTemp: "200°C (400°F)",
+                    instructions: "Blend ingredients, shape into balls, bake for 20 minutes or fry until golden."
+                },
+                {
+                    title: "Gluten-Free Veggie Pizza",
+                    desc: "Pizza with gluten-free crust and assorted vegetables.",
+                    ingredients: ["1 gluten-free pizza base", "1/2 cup tomato sauce", "1 cup mixed vegetables", "1 cup cheese", "1 tsp oregano"],
+                    ovenTime: "18 minutes",
+                    ovenTemp: "220°C (425°F)",
+                    instructions: "Spread sauce, add veggies and cheese, sprinkle oregano, bake for 18 minutes."
+                },
+                {
+                    title: "Gluten-Free Berry Crisp",
+                    desc: "Sweet berry dessert with a crunchy oat topping.",
+                    ingredients: ["2 cups mixed berries", "1/2 cup gluten-free oats", "1/4 cup brown sugar", "1/4 cup butter", "1/4 cup gluten-free flour"],
+                    ovenTime: "30 minutes",
+                    ovenTemp: "180°C (355°F)",
+                    instructions: "Layer berries, mix topping, sprinkle over berries, bake for 30 minutes."
+                },
+                {
+                    title: "Gluten-Free Zucchini Bread",
+                    desc: "Moist bread with zucchini and warm spices.",
+                    ingredients: ["2 cups gluten-free flour", "1 cup grated zucchini", "1/2 cup sugar", "2 eggs", "1/4 cup oil", "1 tsp cinnamon", "1/2 tsp baking soda", "1/2 tsp salt"],
+                    ovenTime: "50 minutes",
+                    ovenTemp: "175°C (350°F)",
+                    instructions: "Mix ingredients, pour into loaf pan, bake for 50 minutes. Cool before slicing."
+                },
+                {
+                    title: "Gluten-Free Coconut Macaroons",
+                    desc: "Chewy coconut cookies, naturally gluten-free.",
+                    ingredients: ["2 cups shredded coconut", "2/3 cup sugar", "2 egg whites", "1 tsp vanilla"],
+                    ovenTime: "15 minutes",
+                    ovenTemp: "180°C (355°F)",
+                    instructions: "Mix ingredients, shape, bake for 15 minutes. Cool and enjoy."
+                },
+                {
+                    title: "Gluten-Free Sweet Potato Fries",
+                    desc: "Crispy baked sweet potato fries.",
+                    ingredients: ["2 large sweet potatoes", "2 tbsp olive oil", "1/2 tsp salt", "1/2 tsp paprika"],
+                    ovenTime: "25 minutes",
+                    ovenTemp: "220°C (425°F)",
+                    instructions: "Slice potatoes, toss with oil and spices, bake for 25 minutes."
+                },
+                {
+                    title: "Gluten-Free Black Bean Brownies",
+                    desc: "Fudgy brownies made with black beans.",
+                    ingredients: ["1 can black beans", "2 eggs", "1/2 cup cocoa powder", "1/2 cup sugar", "1/4 cup oil", "1 tsp vanilla"],
+                    ovenTime: "25 minutes",
+                    ovenTemp: "180°C (355°F)",
+                    instructions: "Blend beans, mix all ingredients, pour into pan, bake for 25 minutes."
                 },
                 {
                     title: "Gluten-Free Cheese Biscuits",

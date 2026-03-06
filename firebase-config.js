@@ -1,12 +1,12 @@
-// Firebase config placeholder for Gluten-Free Website
-// Replace with your Firebase project config
+// Firebase config for Gluten-Free Website
 var firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyBl1wFUIrU6q5pmtIDJ2vIhEU3EnM8lfFA",
+    authDomain: "gluten-free-website.firebaseapp.com",
+    projectId: "gluten-free-website",
+    storageBucket: "gluten-free-website.appspot.com",
+    messagingSenderId: "495801457401",
+    appId: "1:495801457401:web:029aca6fb6205cf7d9e028",
+    measurementId: "G-17J5PFR3F2"
 };
 
 // Initialize Firebase
