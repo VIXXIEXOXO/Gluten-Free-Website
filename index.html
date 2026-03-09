@@ -766,6 +766,10 @@
                 <!-- Profile picture -->
                 <img id="profilePic" src="https://www.gravatar.com/avatar?d=mp&s=80" alt="Profile Picture"
                     style="width:120px;height:120px;border-radius:50%;border:3px solid #6ab187;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff;">
+                <!-- Username under profile picture -->
+                <div id="profileDisplayName"
+                    style="position:absolute;left:50%;top:calc(50% + 70px);transform:translate(-50%,0);font-size:1.3rem;color:#4a7c59;font-weight:bold;margin-bottom:1.2rem;text-align:center;">
+                </div>
                 <div style="position:absolute;right:1rem;top:1rem;">
                     <!-- Banner color input removed; now only in settings modal -->
                 </div>
@@ -872,10 +876,38 @@
             displayNameForm.addEventListener('submit', function (e) {
                 e.preventDefault();
                 const name = displayNameInput.value.trim();
-                if (name) {
-                    displayNameInput.value = name;
-                    displayNameInput.style.background = '#eaf6ee';
-                    settingsModal.style.display = 'none';
+                const saveBtn = displayNameForm.querySelector('button[type="submit"]');
+                if (saveBtn) saveBtn.disabled = true;
+                if (name && currentUser) {
+                    // Save display name to Firestore
+                    db.collection('users').doc(currentUser.uid).set({ displayName: name }, { merge: true })
+                        .then(() => {
+                            displayNameInput.value = name;
+                            displayNameInput.style.background = '#eaf6ee';
+                            // Show feedback
+                            saveBtn.textContent = 'Saved!';
+                            setTimeout(() => {
+                                saveBtn.textContent = 'Save';
+                                settingsModal.style.display = 'none';
+                                saveBtn.disabled = false;
+                            }, 900);
+                            // Update display name in UI
+                            updateDisplayNameUI(name);
+                        })
+                        .catch(() => {
+                            saveBtn.textContent = 'Error';
+                            setTimeout(() => {
+                                saveBtn.textContent = 'Save';
+                                saveBtn.disabled = false;
+                            }, 1200);
+                        });
+                }
+                // Optionally handle not logged in
+                else if (!currentUser) {
+                    alert('You must be logged in to change your display name.');
+                    if (saveBtn) saveBtn.disabled = false;
+                } else {
+                    if (saveBtn) saveBtn.disabled = false;
                 }
             });
 
@@ -931,12 +963,29 @@
                     profileInfo.style.display = '';
                     profileEmail.textContent = 'Logged in as: ' + currentUser.email;
                     profileContainer.style.display = '';
+                    // Load display name from Firestore
+                    db.collection('users').doc(currentUser.uid).get().then(doc => {
+                        if (doc.exists && doc.data().displayName) {
+                            updateDisplayNameUI(doc.data().displayName);
+                        } else {
+                            updateDisplayNameUI('');
+                        }
+                    });
                 } else {
                     authForms.style.display = '';
                     profileInfo.style.display = 'none';
                     profileEmail.textContent = '';
+                    updateDisplayNameUI('');
                     // Hide profile container unless user opens it
                     // profileContainer.style.display = 'none';
+                }
+            }
+
+            // Display name UI update (top-level scope)
+            function updateDisplayNameUI(name) {
+                let displayNameElem = document.getElementById('profileDisplayName');
+                if (displayNameElem) {
+                    displayNameElem.textContent = name ? name : '';
                 }
             }
             firebase.auth().onAuthStateChanged(updateProfileUI);
