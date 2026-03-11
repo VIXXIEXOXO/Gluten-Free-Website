@@ -490,9 +490,12 @@
             <textarea id="notesTextarea" rows="8"
                 style="width:100%;border-radius:0.5rem;border:1px solid #6ab187;padding:1.2rem 1rem 1.5rem 1rem;font-size:1rem;font-family:inherit;resize:vertical;"
                 placeholder=""></textarea>
-            <div style="display: flex; flex-direction: column; align-items: center;">
+            <div style="display: flex; flex-direction: column; align-items: center; width: 100%; gap: 0.5rem;">
                 <button id="saveNotesBtn"
                     style="background:#6ab187;color:#fff;border:none;border-radius:0.5rem;padding:0.7rem;font-size:1rem;margin-top:0.7rem;cursor:pointer;width:100%;">Save
+                </button>
+                <button id="eraseNotesBtn"
+                    style="background:#e57373;color:#fff;border:none;border-radius:0.5rem;padding:0.7rem;font-size:1rem;cursor:pointer;width:100%;">Erase
                 </button>
                 <div id="notesSavedMsg"
                     style="color:#6ab187;text-align:center;margin-top:0.5rem;font-size:1rem;display:none;">Notes saved!
@@ -541,7 +544,10 @@
                 <input type="number" id="timerMinutes" min="1" max="240" step="1" required
                     style="font-size:1.1rem;padding:0.5rem;border-radius:0.5rem;border:1px solid #6ab187;width:135px;text-align:center;">
                 <button type="submit"
-                    style="background:#6ab187;color:#fff;border:none;padding:0.7rem 1.5rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;">Start
+                    style="background:#6ab187;color:#fff;border:none;padding:0.7rem 1.7rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;">Start
+                    Timer</button>
+                <button type="button" id="pauseTimerBtn"
+                    style="background:#fbc02d;color:#fff;border:none;padding:0.7rem 1.4rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;">Pause
                     Timer</button>
                 <button type="button" id="resetTimerBtn"
                     style="background:#e57373;color:#fff;border:none;padding:0.7rem 1.5rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;">Reset
@@ -665,6 +671,16 @@
                         <rect x="4" y="16" width="16" height="4" rx="2" stroke="#4a7c59" stroke-width="2" fill="none" />
                     </svg>
                     Profile
+                </button>
+                <button type="button" id="openFavoritesDropdownBtn">
+                    <!-- Hollow Heart icon SVG -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        style="vertical-align:middle;margin-right:8px;">
+                        <path
+                            d="M12 21s-6.2-5.2-8.4-8.1C1.2 10.1 2.1 7 5 6.2c1.7-.5 3.4.3 4.4 1.7C10.9 9.1 11.5 9 12 9s1.1.1 2.6-1.1c1-1.4 2.7-2.2 4.4-1.7 2.9.8 3.8 3.9 1.4 6.7C18.2 15.8 12 21 12 21z"
+                            stroke="#4a7c59" stroke-width="2.0" fill="none" />
+                    </svg>
+                    Favorites
                 </button>
             </div>
         </nav>
@@ -995,6 +1011,7 @@
             const closeNotesModal = document.getElementById('closeNotesModal');
             const notesTextarea = document.getElementById('notesTextarea');
             const saveNotesBtn = document.getElementById('saveNotesBtn');
+            const eraseNotesBtn = document.getElementById('eraseNotesBtn');
             const notesSavedMsg = document.getElementById('notesSavedMsg');
 
             openNotesBtn.addEventListener('click', function () {
@@ -1018,6 +1035,11 @@
                 localStorage.setItem('userNotes', notesTextarea.value);
                 notesSavedMsg.style.display = 'block';
                 setTimeout(() => { notesSavedMsg.style.display = 'none'; }, 1200);
+            });
+            eraseNotesBtn.addEventListener('click', function () {
+                notesTextarea.value = '';
+                localStorage.removeItem('userNotes');
+                notesSavedMsg.style.display = 'none';
             });
             // Store favorites locally
             function saveFavoritesToLocal() {
@@ -1077,6 +1099,7 @@
 
             // Sidebar navigation logic
             const openProfileBtn = document.getElementById('openProfileBtn');
+            const openFavoritesDropdownBtn = document.getElementById('openFavoritesDropdownBtn');
             openSearchBtn.addEventListener('click', function () {
                 searchContainer.style.display = '';
                 profileContainer.style.display = 'none';
@@ -1087,6 +1110,12 @@
                 profileContainer.style.display = '';
                 mainContainer.style.display = 'none';
                 searchContainer.style.display = 'none';
+                closeSidebar();
+            });
+            openFavoritesDropdownBtn.addEventListener('click', function () {
+                // Open the right sidebar menu (favorites)
+                rightSidebarMenu.classList.add('show');
+                rightSidebarBackdrop.classList.add('show');
                 closeSidebar();
             });
             const openConverterBtn = document.getElementById('openConverterBtn');
@@ -1196,8 +1225,11 @@
                     converterResult.textContent = 'Invalid conversion.';
                     return;
                 }
-                const result = Math.round(value * conversionRates[from][to]);
-                converterResult.textContent = `${value} ${from} = ${result} ${to}`;
+                // Calculate and round up to 2 decimal places
+                let rawResult = value * conversionRates[from][to];
+                let roundedResult = Math.ceil(rawResult * 100) / 100;
+                // Show with 2 decimals
+                converterResult.textContent = `${value} ${from} = ${roundedResult.toFixed(2)} ${to}`;
             });
 
             // Timer modal logic
@@ -1210,7 +1242,9 @@
             let timerInterval = null;
             let timerState = {
                 endTimestamp: null,
-                running: false
+                running: false,
+                paused: false,
+                pausedRemaining: null
             };
 
             function saveTimerState() {
@@ -1230,7 +1264,16 @@
             }
 
             function updateTimerDisplay() {
-                if (timerState.endTimestamp !== null && timerState.running) {
+                if (timerState.paused) {
+                    let remaining = timerState.pausedRemaining;
+                    if (remaining > 0) {
+                        let mins = Math.floor(remaining / 60);
+                        let secs = remaining % 60;
+                        timerDisplay.textContent = `${mins}:${secs.toString().padStart(2, '0')} paused`;
+                    } else {
+                        timerDisplay.textContent = 'Paused';
+                    }
+                } else if (timerState.endTimestamp !== null && timerState.running) {
                     const now = Date.now();
                     let remaining = Math.floor((timerState.endTimestamp - now) / 1000);
                     if (remaining > 0) {
@@ -1251,7 +1294,7 @@
             function startTimer() {
                 clearInterval(timerInterval);
                 timerInterval = setInterval(function () {
-                    if (timerState.running && timerState.endTimestamp !== null) {
+                    if (timerState.running && timerState.endTimestamp !== null && !timerState.paused) {
                         updateTimerDisplay();
                         saveTimerState();
                     } else {
@@ -1263,7 +1306,9 @@
             openTimerBtn.addEventListener('click', function () {
                 timerModal.classList.add('show');
                 loadTimerState();
-                if (timerState.endTimestamp !== null && timerState.running) {
+                if (timerState.paused) {
+                    updateTimerDisplay();
+                } else if (timerState.endTimestamp !== null && timerState.running) {
                     updateTimerDisplay();
                     startTimer();
                 } else {
@@ -1294,6 +1339,8 @@
                 const now = Date.now();
                 timerState.endTimestamp = now + minutes * 60 * 1000;
                 timerState.running = true;
+                timerState.paused = false;
+                timerState.pausedRemaining = null;
                 saveTimerState();
                 updateTimerDisplay();
                 startTimer();
@@ -1303,6 +1350,31 @@
                 clearTimerState();
                 timerDisplay.textContent = '';
                 timerForm.reset();
+            });
+            const pauseTimerBtn = document.getElementById('pauseTimerBtn');
+            pauseTimerBtn.addEventListener('click', function () {
+                if (!timerState.paused && timerState.running && timerState.endTimestamp !== null) {
+                    // Pause
+                    const now = Date.now();
+                    timerState.pausedRemaining = Math.floor((timerState.endTimestamp - now) / 1000);
+                    timerState.paused = true;
+                    timerState.running = false;
+                    clearInterval(timerInterval);
+                    updateTimerDisplay();
+                    pauseTimerBtn.textContent = 'Resume Timer';
+                    saveTimerState();
+                } else if (timerState.paused) {
+                    // Resume
+                    const now = Date.now();
+                    timerState.endTimestamp = now + timerState.pausedRemaining * 1000;
+                    timerState.running = true;
+                    timerState.paused = false;
+                    timerState.pausedRemaining = null;
+                    updateTimerDisplay();
+                    startTimer();
+                    pauseTimerBtn.textContent = 'Pause Timer';
+                    saveTimerState();
+                }
             });
             // Recipes and favorites logic
             // Recipes array
