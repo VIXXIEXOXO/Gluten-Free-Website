@@ -742,6 +742,8 @@
                     style="background:#eaf6ee;color:#4a7c59;border:none;padding:0.5rem 1rem;font-size:0.95rem;border-radius:0.5rem;cursor:pointer;">Sweet</button>
                 <button class="taste-btn" data-taste="salty"
                     style="background:#eaf6ee;color:#4a7c59;border:none;padding:0.5rem 1rem;font-size:0.95rem;border-radius:0.5rem;cursor:pointer;">Salty</button>
+                <button class="taste-btn" data-taste="vegan"
+                    style="background:#eaf6ee;color:#4a7c59;border:none;padding:0.5rem 1rem;font-size:0.95rem;border-radius:0.5rem;cursor:pointer;">Vegan</button>
             </div>
         </div>
         <input type="text" id="searchBar" placeholder="Search for recipes...">
@@ -776,7 +778,7 @@
         <div id="profileInfo" style="display:none;text-align:center;position:relative;">
             <!-- Banner with customization -->
             <div id="profileBanner"
-                style="width:100%;height:160px;background:#eaf6ee;border-radius:1vw;margin-bottom:2.5rem;position:relative;">
+                style="width:100%;height:160px;background:#eaf6ee;border-radius:1vw;margin-bottom:0.5rem;position:relative;">
                 <button id="openSettingsBtn"
                     style="position:absolute;top:1rem;left:1rem;background:none;border:none;cursor:pointer;">
                     <!-- Settings icon SVG -->
@@ -792,13 +794,13 @@
                 <!-- Profile picture -->
                 <img id="profilePic" src="https://www.gravatar.com/avatar?d=mp&s=80" alt="Profile Picture"
                     style="width:120px;height:120px;border-radius:50%;border:3px solid #6ab187;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff;">
-                <!-- Username under profile picture -->
-                <div id="profileDisplayName"
-                    style="position:absolute;left:50%;top:calc(50% + 70px);transform:translate(-50%,0);font-size:1.3rem;color:#4a7c59;font-weight:bold;margin-bottom:1.2rem;text-align:center;">
-                </div>
                 <div style="position:absolute;right:1rem;top:1rem;">
                     <!-- Banner color input removed; now only in settings modal -->
                 </div>
+            </div>
+            <!-- Display name below banner, on white -->
+            <div id="profileDisplayName"
+                style="font-size:1.3rem;color:#4a7c59;font-weight:bold;margin-bottom:1.2rem;text-align:center;margin-top:2.5rem;">
             </div>
             <!-- Settings Modal -->
             <div id="settingsModal"
@@ -887,17 +889,27 @@
             picUploadForm.addEventListener('submit', function (e) {
                 e.preventDefault();
                 const file = picUpload.files[0];
-                if (file) {
+                if (file && currentUser) {
                     const reader = new FileReader();
                     reader.onload = function (ev) {
                         profilePic.src = ev.target.result;
-                        settingsModal.style.display = 'none';
+                        // Save profile picture to Firestore
+                        db.collection('users').doc(currentUser.uid).set({ profilePic: ev.target.result }, { merge: true })
+                            .then(() => {
+                                settingsModal.style.display = 'none';
+                            });
                     };
                     reader.readAsDataURL(file);
+                } else if (!currentUser) {
+                    alert('You must be logged in to change your profile picture.');
                 }
             });
             bannerColor.addEventListener('input', function () {
                 profileBanner.style.background = bannerColor.value;
+                // Save banner color to Firestore
+                if (currentUser) {
+                    db.collection('users').doc(currentUser.uid).set({ bannerColor: bannerColor.value }, { merge: true });
+                }
             });
             displayNameForm.addEventListener('submit', function (e) {
                 e.preventDefault();
@@ -991,10 +1003,32 @@
                     profileContainer.style.display = '';
                     // Load display name from Firestore
                     db.collection('users').doc(currentUser.uid).get().then(doc => {
-                        if (doc.exists && doc.data().displayName) {
-                            updateDisplayNameUI(doc.data().displayName);
+                        if (doc.exists) {
+                            const data = doc.data();
+                            if (data.displayName) {
+                                updateDisplayNameUI(data.displayName);
+                            } else {
+                                updateDisplayNameUI('');
+                            }
+                            // Load banner color
+                            if (data.bannerColor) {
+                                profileBanner.style.background = data.bannerColor;
+                                bannerColor.value = data.bannerColor;
+                            } else {
+                                profileBanner.style.background = '#eaf6ee';
+                                bannerColor.value = '#eaf6ee';
+                            }
+                            // Load profile picture
+                            if (data.profilePic) {
+                                profilePic.src = data.profilePic;
+                            } else {
+                                profilePic.src = 'https://www.gravatar.com/avatar?d=mp&s=80';
+                            }
                         } else {
                             updateDisplayNameUI('');
+                            profileBanner.style.background = '#eaf6ee';
+                            bannerColor.value = '#eaf6ee';
+                            profilePic.src = 'https://www.gravatar.com/avatar?d=mp&s=80';
                         }
                     });
                 } else {
@@ -1389,6 +1423,94 @@
             // Recipes and favorites logic
             // Recipes array
             const recipes = [
+                // Vegan gluten-free recipes
+                {
+                    title: "Vegan Chocolate Cake",
+                    desc: "Moist, rich chocolate cake that's both vegan and gluten-free.",
+                    ingredients: [
+                        "2 cups gluten-free flour",
+                        "1 cup coconut sugar",
+                        "1/2 cup cocoa powder",
+                        "1 tsp baking soda",
+                        "1/2 tsp salt",
+                        "1.5 cups almond milk",
+                        "1/2 cup coconut oil",
+                        "1 tbsp apple cider vinegar",
+                        "1 tsp vanilla extract"
+                    ],
+                    ovenTime: "30 minutes",
+                    ovenTemp: "180°C (355°F)",
+                    instructions: "1. Preheat oven to 180°C (355°F).\n2. Mix dry ingredients in a bowl.\n3. Mix wet ingredients in another bowl.\n4. Combine and stir until smooth.\n5. Pour into a greased cake pan.\n6. Bake for 30 minutes.\n7. Let cool before serving.",
+                    vegan: true
+                },
+                {
+                    title: "Vegan Banana Bread",
+                    desc: "Delicious banana bread that's vegan and gluten-free.",
+                    ingredients: [
+                        "3 ripe bananas",
+                        "2 cups gluten-free flour",
+                        "1/2 cup coconut sugar",
+                        "1/4 cup coconut oil",
+                        "1 tsp baking soda",
+                        "1/2 tsp salt",
+                        "1/2 cup almond milk"
+                    ],
+                    ovenTime: "50 minutes",
+                    ovenTemp: "175°C (350°F)",
+                    instructions: "1. Preheat oven to 175°C (350°F).\n2. Mash bananas.\n3. Mix all ingredients.\n4. Pour into a greased loaf pan.\n5. Bake for 50 minutes.\n6. Let cool before slicing.",
+                    vegan: true
+                },
+                {
+                    title: "Vegan Oatmeal Cookies",
+                    desc: "Chewy vegan cookies with gluten-free oats.",
+                    ingredients: [
+                        "2 cups gluten-free oats",
+                        "1 cup mashed banana",
+                        "1/2 cup almond butter",
+                        "1/4 cup maple syrup",
+                        "1/2 tsp cinnamon",
+                        "1/2 tsp baking soda"
+                    ],
+                    ovenTime: "12 minutes",
+                    ovenTemp: "180°C (355°F)",
+                    instructions: "1. Preheat oven to 180°C (355°F).\n2. Mix all ingredients.\n3. Drop spoonfuls onto baking sheet.\n4. Bake for 12 minutes.\n5. Let cool.",
+                    vegan: true
+                },
+                {
+                    title: "Vegan Lentil Loaf",
+                    desc: "Savory vegan loaf with lentils and veggies.",
+                    ingredients: [
+                        "2 cups cooked lentils",
+                        "1 cup gluten-free oats",
+                        "1/2 cup grated carrot",
+                        "1/2 cup chopped onion",
+                        "1/4 cup tomato paste",
+                        "1 tbsp flaxseed meal",
+                        "1 tsp dried thyme",
+                        "Salt and pepper to taste"
+                    ],
+                    ovenTime: "40 minutes",
+                    ovenTemp: "180°C (355°F)",
+                    instructions: "1. Preheat oven to 180°C (355°F).\n2. Mix all ingredients.\n3. Press into loaf pan.\n4. Bake for 40 minutes.\n5. Let cool before slicing.",
+                    vegan: true
+                },
+                {
+                    title: "Vegan Pancakes",
+                    desc: "Fluffy vegan pancakes made gluten-free.",
+                    ingredients: [
+                        "1 cup gluten-free flour",
+                        "1 tbsp sugar",
+                        "1 tsp baking powder",
+                        "1/2 tsp salt",
+                        "1 cup almond milk",
+                        "2 tbsp coconut oil"
+                    ],
+                    ovenTime: "Cook 2-3 min per side",
+                    ovenTemp: "Medium skillet",
+                    instructions: "1. Mix dry ingredients.\n2. Add wet ingredients and stir.\n3. Cook on skillet 2-3 min per side.",
+                    vegan: true
+                },
+                // ...existing code...
                 {
                     title: "Chocolate Muffins",
                     desc: "Rich, moist chocolate muffins with gluten-free flour.",
@@ -1984,8 +2106,12 @@
                     filtered = filtered.filter(r => catTitles.some(t => r.title.toLowerCase().includes(t.toLowerCase())));
                 }
                 if (selectedTaste && selectedTaste !== "all") {
-                    const tasteTitles = tasteMap[selectedTaste] || [];
-                    filtered = filtered.filter(r => tasteTitles.some(t => r.title.toLowerCase().includes(t.toLowerCase())));
+                    if (selectedTaste === "vegan") {
+                        filtered = filtered.filter(r => r.vegan === true);
+                    } else {
+                        const tasteTitles = tasteMap[selectedTaste] || [];
+                        filtered = filtered.filter(r => tasteTitles.some(t => r.title.toLowerCase().includes(t.toLowerCase())));
+                    }
                 }
                 if (query) {
                     filtered = filtered.filter(r => r.title.toLowerCase().includes(query) || r.desc.toLowerCase().includes(query));
