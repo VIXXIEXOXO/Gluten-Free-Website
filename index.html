@@ -319,7 +319,7 @@
             background: #fff;
             margin: auto;
             border-radius: 1.2rem;
-            padding: 2rem 1.5rem 1.5rem 1.5rem;
+            padding: 2rem 1.5rem 1.2rem 1.5rem;
             max-width: 95vw;
             width: 350px;
             /* box-shadow removed */
@@ -492,7 +492,7 @@
                 placeholder=""></textarea>
             <div style="display: flex; flex-direction: column; align-items: center; width: 100%; gap: 0.5rem;">
                 <button id="saveNotesBtn"
-                    style="background:#6ab187;color:#fff;border:none;border-radius:0.5rem;padding:0.7rem;font-size:1rem;margin-top:0.7rem;cursor:pointer;width:100%;">Save
+                    style="background:#6ab187;color:#fff;border:none;border-radius:0.5rem;padding:0.7rem;font-size:1rem;margin-top:1.2rem;cursor:pointer;width:100%;">Save
                 </button>
                 <button id="eraseNotesBtn"
                     style="background:#e57373;color:#fff;border:none;border-radius:0.5rem;padding:0.7rem;font-size:1rem;cursor:pointer;width:100%;">Erase
@@ -547,7 +547,7 @@
                     style="background:#6ab187;color:#fff;border:none;padding:0.7rem 1.7rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;">Start
                     Timer</button>
                 <button type="button" id="pauseTimerBtn"
-                    style="background:#fbc02d;color:#fff;border:none;padding:0.7rem 1.4rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;">Pause
+                    style="background:#ffcd4d;color:#fff;border:none;padding:0.7rem 1.4rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;">Pause
                     Timer</button>
                 <button type="button" id="resetTimerBtn"
                     style="background:#e57373;color:#fff;border:none;padding:0.7rem 1.5rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;">Reset
@@ -780,15 +780,15 @@
             <div id="profileBanner"
                 style="width:100%;height:160px;background:#eaf6ee;border-radius:1vw;margin-bottom:0.5rem;position:relative;">
                 <button id="openSettingsBtn"
-                    style="position:absolute;top:1rem;left:1rem;background:none;border:none;cursor:pointer;">
-                    <!-- Settings icon SVG -->
+                    style="position:absolute;top:0.7rem;left:1rem;transform:translate(0, 0);display:flex;align-items:center;justify-content:center;background:none;border:none;cursor:pointer;width:40px;height:40px;padding:0;">
+                    <!-- Default gear settings icon SVG -->
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
                         style="vertical-align:middle;margin-right:8px;">
-                        <circle cx="12" cy="12" r="5" stroke="#4a7c59" stroke-width="2" fill="none" />
+                        <path d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7z" stroke="#4a7c59" stroke-width="2"
+                            fill="none" />
                         <path
-                            d="M12 2v2M12 20v2M2 12h2M20 12h2M5.64 5.64l1.41 1.41M16.95 16.95l1.41 1.41M5.64 18.36l1.41-1.41M16.95 7.05l1.41-1.41"
-                            stroke="#4a7c59" stroke-width="2" stroke-linecap="round" />
-                        <circle cx="12" cy="12" r="10" stroke="#4a7c59" stroke-width="2" fill="none" />
+                            d="M19.4 13c.04-.32.06-.65.06-1s-.02-.68-.06-1l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.61-.22l-2.39.96a7.03 7.03 0 0 0-1.73-1l-.36-2.53A.5.5 0 0 0 14 2h-4a.5.5 0 0 0-.5.42l-.36 2.53a7.03 7.03 0 0 0-1.73 1l-2.39-.96a.5.5 0 0 0-.61.22l-1.92 3.32a.5.5 0 0 0 .12.64L4.6 11c-.04.32-.06.65-.06 1s.02.68.06 1l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32a.5.5 0 0 0 .61.22l2.39-.96a7.03 7.03 0 0 0 1.73 1l.36 2.53A.5.5 0 0 0 10 22h4a.5.5 0 0 0 .5-.42l.36-2.53a7.03 7.03 0 0 0 1.73-1l2.39.96a.5.5 0 0 0 .61-.22l1.92-3.32a.5.5 0 0 0-.12-.64L19.4 13z"
+                            stroke="#4a7c59" stroke-width="2" fill="none" />
                     </svg>
                 </button>
                 <!-- Profile picture -->
@@ -800,7 +800,7 @@
             </div>
             <!-- Display name below banner, on white -->
             <div id="profileDisplayName"
-                style="font-size:1.3rem;color:#4a7c59;font-weight:bold;margin-bottom:1.2rem;text-align:center;margin-top:2.5rem;">
+                style="font-size:1.3rem;color:#4a7c59;font-weight:bold;margin-bottom:1.6rem;text-align:center;margin-top:2.5rem;">
             </div>
             <!-- Settings Modal -->
             <div id="settingsModal"
@@ -815,7 +815,7 @@
                         <input type="file" id="picUpload" accept="image/*"
                             style="display:inline-block;margin-top:0.5rem;">
                         <button type="submit"
-                            style="background:#6ab187;color:#fff;border:none;padding:0.3rem 0.8rem;border-radius:0.5rem;font-size:0.9rem;cursor:pointer;margin-top:0.5rem;">Upload</button>
+                            style="background:#6ab187;color:#fff;border:none;padding:0.4rem 0.8rem;border-radius:0.5rem;font-size:0.9rem;cursor:pointer;margin-top:0.5rem;">Upload</button>
                     </form>
                     <div style="margin-bottom:1rem;text-align:left;">
                         <div style="display:flex;align-items:center;">
@@ -830,22 +830,18 @@
                         <input type="text" id="displayNameInput" placeholder="Display Name"
                             style="font-size:1.1rem;padding:0.4rem 1rem;border-radius:0.5rem;border:1px solid #6ab187;width:180px;margin-top:0.5rem;">
                         <button type="submit"
-                            style="background:#6ab187;color:#fff;border:none;padding:0.4rem 1rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;margin-left:0.5rem;margin-bottom:1.2rem;">Save</button>
+                            style="background:#6ab187;color:#fff;border:none;padding:0.5rem 1rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;margin-left:0.5rem;margin-bottom:1.2rem;">Save</button>
                     </form>
+                    <button id="resetProfileBtn"
+                        style="background:#e57373;color:#fff;border:none;padding:0.6rem 1rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;width:auto;margin-top:1rem;margin-bottom:2.0rem;box-shadow:0 2px 8px rgba(106,177,135,0.15);">Reset
+                        to Default</button>
                 </div>
             </div>
             <p id="profileEmail" style="font-size:1.1rem;color:#888;margin-bottom:1.8rem;"></p>
-            <div style="margin-bottom:1.5rem;">
-                <button id="favoritesBtn"
-                    style="background:#6ab187;color:#fff;border:none;padding:0.7rem 1.5rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;margin:0.5rem 0;">Favorite
-                    Recipes</button>
-                <button id="postRecipeBtn"
-                    style="background:#4a7c59;color:#fff;border:none;padding:0.7rem 1.5rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;margin:0.5rem 0;">Post
-                    a Picture</button>
-            </div>
+            <div style="margin-bottom:1.5rem;"></div>
             <!-- Your Features section removed -->
             <button id="logoutBtn"
-                style="background:#e57373;color:#fff;border:none;padding:0.7rem 1.5rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;margin-top:1rem;margin-bottom:2.2rem;">Logout</button>
+                style="background:#e57373;color:#fff;border:none;padding:0.7rem 1.5rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;margin-top:0.4rem;margin-bottom:2.2rem;">Logout</button>
         </div>
     </div>
     <script>
@@ -874,6 +870,28 @@
             const displayNameInput = document.getElementById('displayNameInput');
             let currentUser = null;
             // Profile customization logic in settings modal
+            // Reset profile customization
+            const resetProfileBtn = document.getElementById('resetProfileBtn');
+            resetProfileBtn.addEventListener('click', function () {
+                if (!currentUser) {
+                    alert('You must be logged in to reset your profile.');
+                    return;
+                }
+                // Reset values
+                profilePic.src = 'https://www.gravatar.com/avatar?d=mp&s=80';
+                profileBanner.style.background = '#eaf6ee';
+                bannerColor.value = '#eaf6ee';
+                displayNameInput.value = '';
+                // Save to Firestore
+                db.collection('users').doc(currentUser.uid).set({
+                    profilePic: 'https://www.gravatar.com/avatar?d=mp&s=80',
+                    bannerColor: '#eaf6ee',
+                    displayName: ''
+                }, { merge: true }).then(() => {
+                    updateDisplayNameUI('');
+                    settingsModal.style.display = 'none';
+                });
+            });
             const openSettingsBtn = document.getElementById('openSettingsBtn');
             const settingsModal = document.getElementById('settingsModal');
             const closeSettingsBtn = document.getElementById('closeSettingsBtn');
@@ -1510,7 +1528,6 @@
                     instructions: "1. Mix dry ingredients.\n2. Add wet ingredients and stir.\n3. Cook on skillet 2-3 min per side.",
                     vegan: true
                 },
-                // ...existing code...
                 {
                     title: "Chocolate Muffins",
                     desc: "Rich, moist chocolate muffins with gluten-free flour.",
