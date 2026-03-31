@@ -210,7 +210,7 @@
         }
 
         header p {
-            font-size: 1.1rem;
+            font-size: 1.5rem;
             margin: 0 0 0.5rem 0;
         }
 
@@ -710,7 +710,7 @@
             </div>
             <!-- Blank for now -->
         </nav>
-        <h1>Gluten-Free Baking Recipes</h1>
+        <h1 style="font-size:3.0rem;">Gluten-Free Baking Recipes</h1>
         <p>Find your next favorite gluten-free treat!</p>
     </header>
     <div class="container" id="mainContainer">
@@ -2001,7 +2001,7 @@
                         <ul style="margin-bottom:1rem;font-size:1.15rem;">${recipe.ingredients.map(i => `<li>${i}</li>`).join('')}</ul>
                         <strong style="font-size:1.2rem;">Bake:</strong> <span style="font-size:1.15rem;">${recipe.ovenTime} at ${recipe.ovenTemp}</span><br><br>
                         <strong style="font-size:1.2rem;">Instructions:</strong>
-                        <ol style="font-size:1.25rem;line-height:1.7;margin-left:1.2rem;">
+                        <ol style="font-size:1.15rem;line-height:1.7;margin-left:1.2rem;">
                             ${(() => {
                         // Split by numbered steps, or fallback to splitting by newlines
                         let steps = recipe.instructions.match(/(\d+\.\s.*?)(?=\n\d+\.|$)/gs);
