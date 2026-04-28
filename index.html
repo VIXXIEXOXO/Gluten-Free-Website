@@ -1,497 +1,17 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <link rel="icon" type="image/png" href="icon.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
     <title>Glutena</title>
-    <style>
-        /* Calculator modal and form styling to match others */
-        #calculatorModal .modal-content {
-            background: #fff;
-            border-radius: 1.2rem;
-            padding: 2rem 1.5rem 2.5rem 1.5rem;
-            max-width: 95vw;
-            width: 350px;
-            position: relative;
-        }
-
-        #calculatorModal h2 {
-            color: #4a7c59;
-            font-size: 1.3rem;
-            text-align: center;
-            margin-top: 0;
-        }
-
-        #calculatorForm {
-            display: flex;
-            flex-direction: column;
-            gap: 0.1rem;
-            align-items: center;
-        }
-
-        #calcDisplay {
-            width: 220px;
-            font-size: 1.15rem;
-            text-align: right;
-            padding: 0.5rem;
-            border-radius: 0.5rem;
-            border: 3px solid #6ab187;
-            background: #ffffff;
-            color: #333;
-            margin-bottom: 0.5rem;
-        }
-
-        .calc-btn {
-            background: #eaf6ee;
-            color: #4a7c59;
-            border: none;
-            border-radius: 0.5rem;
-            padding: 0.7rem;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: background 0.2s, color 0.2s;
-        }
-
-        .calc-btn:hover {
-            background: #6ab187;
-            color: #fff;
-        }
-
-        .calc-btn[data-value="="] {
-            background: #4a7c59;
-            color: #fff;
-            grid-column: span 4;
-        }
-
-        .calc-btn[data-value="="]:hover {
-            background: #388e5c;
-        }
-
-        @media (min-width: 800px) {
-            #calculatorModal .modal-content {
-                width: 500px;
-                min-width: 400px;
-            }
-        }
-
-        @media (max-width: 400px) {
-            #calculatorModal .modal-content {
-                padding: 1rem 0.5rem 1rem 0.5rem;
-                width: 98vw;
-            }
-
-            #calcDisplay {
-                width: 98vw;
-            }
-        }
-
-        /* Right sidebar (heart menu) styles */
-        .right-sidebar-menu {
-            position: fixed;
-            top: 0;
-            right: 0;
-            height: 100vh;
-            width: 75vw;
-            max-width: 320px;
-            min-width: 220px;
-            background: #fff;
-            /* box-shadow removed */
-            z-index: 2100;
-            transform: translateX(100%);
-            transition: transform 0.3s cubic-bezier(.4, 0, .2, 1);
-            display: flex;
-            flex-direction: column;
-            padding-top: 0;
-        }
-
-        .right-sidebar-menu.show {
-            transform: translateX(0);
-        }
-
-        .right-sidebar-header {
-            display: flex;
-            align-items: center;
-            padding: 1.2rem 1.2rem 0.5rem 1.2rem;
-            border-bottom: 1px solid #eee;
-        }
-
-        .right-sidebar-menu-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 0.5rem;
-        }
-
-        .right-sidebar-backdrop {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.18);
-            z-index: 2000;
-        }
-
-        .right-sidebar-backdrop.show {
-            display: block;
-        }
-
-        @media (max-width: 600px) {
-            .right-sidebar-menu {
-                width: 90vw;
-                min-width: 0;
-                max-width: 98vw;
-            }
-        }
-
-        html {
-            box-sizing: border-box;
-            font-size: 16px;
-        }
-
-        *,
-        *:before,
-        *:after {
-            box-sizing: inherit;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background: #f8f8f8 url('pattern.png') repeat;
-            margin: 0;
-            padding: 0;
-        }
-
-        header {
-            background: #6ab187;
-            color: white;
-            padding: 2.0vw 0 2vw 0;
-            text-align: center;
-            position: relative;
-        }
-
-        .header-icon {
-            position: absolute;
-            top: 1.5vw;
-            width: 8vw;
-            max-width: 40px;
-            min-width: 28px;
-            height: 8vw;
-            max-height: 40px;
-            min-height: 28px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-        }
-
-        .menu-icon {
-            left: 2vw;
-        }
-
-        .heart-icon {
-            right: 2vw;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin: 0.5rem 0 1.2rem 0;
-        }
-
-        /* Responsive: Make h1 title smaller on small screens */
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 1.7rem;
-            }
-        }
-
-        @media (max-width: 400px) {
-            h1 {
-                font-size: 1.2rem;
-            }
-        }
-
-        header p {
-            font-size: 1.5rem;
-            margin: 0 0 0.5rem 0;
-        }
-
-        .container {
-            max-width: 800px;
-            width: 92vw;
-            margin: 3vw auto;
-            background: white;
-            padding: 5vw 2vw;
-            border-radius: 2vw;
-            border: 5px solid #6ab187;
-            /* box-shadow removed */
-        }
-
-        #searchBar {
-            width: 100%;
-            padding: 1vw 0.5vw;
-            font-size: 0.95rem;
-            border: 2px solid #6ab187;
-            border-radius: 0.7vw;
-            margin-bottom: 4vw;
-        }
-
-        .recipe-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .recipe-item {
-            padding: 3vw 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .recipe-item:last-child {
-            border-bottom: none;
-        }
-
-        .recipe-title {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #4a7c59;
-        }
-
-        .recipe-desc {
-            color: #555;
-            margin-top: 0.5rem;
-        }
-
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 1.6rem;
-            }
-
-            .container {
-                padding: 6vw 2vw;
-            }
-
-            #searchBar {
-                font-size: 0.85rem;
-                padding: 1.7vw 1.3vw;
-            }
-
-            .header-icon {
-                min-width: 24px;
-                min-height: 24px;
-                max-width: 32px;
-                max-height: 32px;
-            }
-        }
-
-        @media (max-width: 400px) {
-            h1 {
-                font-size: 1.1rem;
-            }
-
-            .container {
-                padding: 4vw 1vw;
-            }
-        }
-    </style>
     <!-- Firebase scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-firestore-compat.js"></script>
     <script src="firebase-config.js"></script>
-    <style>
-        /* Modal styles for converter */
-        .modal-converter {
-            display: none;
-            position: fixed;
-            z-index: 3000;
-            left: 0;
-            top: 0;
-            width: 100vw;
-            height: 100vh;
-            overflow: auto;
-            background: rgba(0, 0, 0, 0.25);
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-converter.show {
-            display: flex;
-        }
-
-        .modal-content {
-            background: #fff;
-            margin: auto;
-            border-radius: 1.2rem;
-            padding: 2rem 1.5rem 1.2rem 1.5rem;
-            max-width: 95vw;
-            width: 350px;
-            border: 4px solid #6ab187;
-            /* box-shadow removed */
-            position: relative;
-        }
-
-        @media (min-width: 800px) {
-            .modal-content {
-                width: 500px;
-                min-width: 400px;
-            }
-        }
-
-        .modal-close-btn {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: #4a7c59;
-            cursor: pointer;
-        }
-
-        .modal-content h2 {
-            margin-top: 0;
-            color: #4a7c59;
-            font-size: 1.3rem;
-            text-align: center;
-        }
-
-        .converter-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .converter-form input,
-        .converter-form select {
-            padding: 0.5rem;
-            font-size: 1rem;
-            border-radius: 0.5rem;
-            border: 2px solid #6ab187;
-        }
-
-        .converter-form button {
-            background: #6ab187;
-            color: #fff;
-            border: none;
-            border-radius: 0.5rem;
-            padding: 0.7rem;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-
-        .converter-result {
-            text-align: center;
-            margin-top: 0.5rem;
-            color: #333;
-            font-weight: bold;
-        }
-
-        @media (max-width: 400px) {
-            .modal-content {
-                padding: 1rem 0.5rem 1rem 0.5rem;
-                width: 98vw;
-            }
-        }
-    </style>
-    <style>
-        /* Sidebar menu styles */
-        .sidebar-menu {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100vh;
-            width: 75vw;
-            max-width: 320px;
-            min-width: 220px;
-            background: #fff;
-            /* box-shadow removed */
-            z-index: 2000;
-            transform: translateX(-100%);
-            transition: transform 0.3s cubic-bezier(.4, 0, .2, 1);
-            display: flex;
-            flex-direction: column;
-            padding-top: 0;
-        }
-
-        .sidebar-menu.show {
-            transform: translateX(0);
-        }
-
-        .sidebar-header {
-            display: flex;
-            align-items: center;
-            padding: 1.2rem 1.2rem 0.5rem 1.2rem;
-            border-bottom: 1px solid #eee;
-        }
-
-        .sidebar-menu-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 0.5rem;
-        }
-
-        .sidebar-menu-list {
-            display: flex;
-            flex-direction: column;
-            padding: 1rem 0;
-        }
-
-        .sidebar-menu-list button {
-            width: 100%;
-            background: none;
-            border: none;
-            padding: 1rem 1.5rem;
-            text-align: left;
-            font-size: 1.1rem;
-            color: #333;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .sidebar-menu-list button:hover {
-            background: #f0f0f0;
-        }
-
-        .sidebar-backdrop {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.18);
-            z-index: 1500;
-        }
-
-        .sidebar-backdrop.show {
-            display: block;
-        }
-
-        @media (max-width: 600px) {
-            .sidebar-menu {
-                width: 90vw;
-                min-width: 0;
-                max-width: 98vw;
-            }
-        }
-    </style>
 </head>
 
 <body>
@@ -501,15 +21,15 @@
         <div class="modal-content" style="padding:2rem 1.5rem 2.5rem 1.5rem;">
             <button class="modal-close-btn" id="closeNotesModal" aria-label="Close notes">&times;</button>
             <h2>Notes</h2>
-            <textarea id="notesTextarea" rows="8"
-                style="width:220px;border-radius:0.5rem;border:2px solid #6ab187;padding:1.2rem 1rem 1.5rem 1rem;font-size:1rem;font-family:inherit;resize:vertical;display:block;margin-left:auto;margin-right:auto;"
+            <textarea id="notesTextarea" rows="8" class="modal-form-field"
+                style="border-radius:0.5rem;border:2px solid #6ab187;padding:1.2rem 1rem 1.5rem 1rem;font-size:1rem;font-family:inherit;resize:vertical;display:block;margin-left:auto;margin-right:auto;"
                 placeholder=""></textarea>
             <div style="display: flex; flex-direction: column; align-items: center; width: 100%; gap: 0.5rem;">
-                <button id="saveNotesBtn"
-                    style="background:#6ab187;color:#fff;border:none;border-radius:0.5rem;padding:0.7rem;font-size:1rem;margin-top:1.2rem;cursor:pointer;width:220px;">Save
+                <button id="saveNotesBtn" class="modal-form-field"
+                    style="background:#6ab187;color:#fff;border:none;border-radius:0.5rem;padding:0.7rem;font-size:1rem;margin-top:1.2rem;cursor:pointer;">Save
                 </button>
-                <button id="eraseNotesBtn"
-                    style="background:#e57373;color:#fff;border:none;border-radius:0.5rem;padding:0.7rem;font-size:1rem;cursor:pointer;width:220px;">Erase
+                <button id="eraseNotesBtn" class="modal-form-field"
+                    style="background:#e57373;color:#fff;border:none;border-radius:0.5rem;padding:0.7rem;font-size:1rem;cursor:pointer;">Erase
                 </button>
                 <div id="notesSavedMsg"
                     style="color:#6ab187;text-align:center;margin-top:0.5rem;font-size:1rem;display:none;">Notes saved!
@@ -523,22 +43,22 @@
             <button class="modal-close-btn" id="closeCalculatorModal" aria-label="Close calculator">&times;</button>
             <h2>Calculator</h2>
             <form id="calculatorForm" style="display:flex;flex-direction:column;gap:1rem;align-items:center;">
-                <input type="text" id="calcDisplay" readonly
-                    style="width:220px;font-size:1.3rem;text-align:right;padding:0.5rem;border-radius:0.5rem;border:2px solid #6ab187;" />
+                <input type="text" id="calcDisplay" readonly class="modal-form-field"
+                    style="font-size:1.3rem;text-align:right;padding:0.5rem;border-radius:0.5rem;border:2px solid #6ab187;" />
                 <div
                     style="display:grid;grid-template-columns:repeat(4,50px);gap:0.5rem;margin-left:auto;margin-right:auto;">
                     <button type="button" class="calc-btn" data-value="7">7</button>
                     <button type="button" class="calc-btn" data-value="8">8</button>
                     <button type="button" class="calc-btn" data-value="9">9</button>
-                    <button type="button" class="calc-btn" data-value="/">÷</button>
+                    <button type="button" class="calc-btn" data-value="/">&divide;</button>
                     <button type="button" class="calc-btn" data-value="4">4</button>
                     <button type="button" class="calc-btn" data-value="5">5</button>
                     <button type="button" class="calc-btn" data-value="6">6</button>
-                    <button type="button" class="calc-btn" data-value="*">×</button>
+                    <button type="button" class="calc-btn" data-value="*">&times;</button>
                     <button type="button" class="calc-btn" data-value="1">1</button>
                     <button type="button" class="calc-btn" data-value="2">2</button>
                     <button type="button" class="calc-btn" data-value="3">3</button>
-                    <button type="button" class="calc-btn" data-value="-">−</button>
+                    <button type="button" class="calc-btn" data-value="-">&minus;</button>
                     <button type="button" class="calc-btn" data-value="0">0</button>
                     <button type="button" class="calc-btn" data-value=".">.</button>
                     <button type="button" class="calc-btn" data-value="C">C</button>
@@ -552,25 +72,25 @@
     <div class="modal-converter" id="timerModal">
         <div class="modal-content">
             <button class="modal-close-btn" id="closeTimerModal" aria-label="Close timer">&times;</button>
-            <h2>Oven Baking Timer</h2>
+            <h2>Timer</h2>
             <form id="timerForm" style="display:flex;flex-direction:column;gap:1rem;align-items:center;">
                 <label for="timerMinutes"
                     style="font-size:1.1rem;color:#888; margin-top: -0.5rem; margin-bottom: -0.1rem;">Set timer
                     (minutes):</label>
-                <input type="number" id="timerMinutes" min="1" max="240" step="1" required
-                    style="font-size:1.1rem;padding:0.5rem;border-radius:0.5rem;border:2px solid #6ab187;width:220px;text-align:center; margin-bottom: 0.3rem;">
-                <button type="submit"
-                    style="background:#6ab187;color:#fff;border:none;padding:0.7rem 1.7rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;width:220px;">Start
+                <input type="number" id="timerMinutes" min="1" max="240" step="1" required class="modal-form-field"
+                    style="font-size:1.1rem;padding:0.5rem;border-radius:0.5rem;border:2px solid #6ab187;text-align:center; margin-bottom: 0.3rem;">
+                <button type="submit" class="modal-form-field"
+                    style="background:#6ab187;color:#fff;border:none;padding:0.7rem 1.7rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;">Start
                     Timer</button>
-                <button type="button" id="pauseTimerBtn"
-                    style="background:#ffcd4d;color:#fff;border:none;padding:0.7rem 1.4rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;width:220px;margin-top:-0.5rem;">Pause
+                <button type="button" id="pauseTimerBtn" class="modal-form-field"
+                    style="background:#ffcd4d;color:#fff;border:none;padding:0.7rem 1.4rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;margin-top:-0.5rem;">Pause
                     Timer</button>
-                <button type="button" id="resetTimerBtn"
-                    style="background:#e57373;color:#fff;border:none;padding:0.7rem 1.5rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;width:220px;margin-top:-0.5rem;">Reset
+                <button type="button" id="resetTimerBtn" class="modal-form-field"
+                    style="background:#e57373;color:#fff;border:none;padding:0.7rem 1.5rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;margin-top:-0.5rem;">Reset
                     Timer</button>
             </form>
-            <div id="timerDisplay"
-                style="text-align:center;font-size:1.3rem;color:#4a7c59;margin-top:1rem;width:220px;margin-left:auto;margin-right:auto;">
+            <div id="timerDisplay" class="modal-form-field"
+                style="text-align:center;font-size:1.3rem;color:#4a7c59;margin-top:1rem;margin-left:auto;margin-right:auto;">
             </div>
         </div>
     </div>
@@ -578,12 +98,11 @@
     <div class="modal-converter" id="converterModal">
         <div class="modal-content">
             <button class="modal-close-btn" id="closeConverterModal" aria-label="Close converter">&times;</button>
-            <h2>Baking Measurement Converter</h2>
+            <h2>Converter</h2>
             <form class="converter-form" id="converterForm" autocomplete="off"
                 style="display:flex;flex-direction:column;align-items:center;">
-                <input type="number" id="convertValue" placeholder="Enter value" min="0" step="any" required
-                    style="width:220px;">
-                <select id="convertFrom" style="width:220px;">
+                <input type="number" id="convertValue" placeholder="Enter value" min="0" step="any" required class="modal-form-field">
+                <select id="convertFrom" class="modal-form-field">
                     <option value="cups">Cups</option>
                     <option value="tablespoons">Tablespoons</option>
                     <option value="teaspoons">Teaspoons</option>
@@ -592,7 +111,7 @@
                     <option value="milliliters">Milliliters</option>
                 </select>
                 <span style="text-align:center;">to</span>
-                <select id="convertTo" style="width:220px;">
+                <select id="convertTo" class="modal-form-field">
                     <option value="cups">Cups</option>
                     <option value="tablespoons">Tablespoons</option>
                     <option value="teaspoons">Teaspoons</option>
@@ -600,7 +119,7 @@
                     <option value="ounces">Ounces</option>
                     <option value="milliliters">Milliliters</option>
                 </select>
-                <button type="submit" style="width:220px;">Convert</button>
+                <button type="submit" class="modal-form-field">Convert</button>
                 <div class="converter-result" id="converterResult"></div>
             </form>
         </div>
@@ -728,7 +247,7 @@
             </div>
             <!-- Blank for now -->
         </nav>
-        <h1 style="font-size:3.0rem;">Gluten-Free Baking Recipes</h1>
+        <h1>Gluten-Free Baking Recipes</h1>
         <p>Find your next favorite gluten-free treat!</p>
     </header>
     <div class="container" id="mainContainer">
@@ -1226,8 +745,8 @@
                         updateCalcDisplay();
                     } else if (val === '=') {
                         try {
-                            // Replace division and multiplication symbols for eval
-                            let expr = calcValue.replace(/÷/g, '/').replace(/×/g, '*').replace(/−/g, '-');
+                            // data-value already stores ASCII operators
+                            let expr = calcValue;
                             // Only allow numbers and operators
                             if (/^[0-9+\-*/. ]+$/.test(expr)) {
                                 calcValue = eval(expr).toString();
@@ -1477,8 +996,8 @@
                         "1 tsp vanilla extract"
                     ],
                     ovenTime: "30 minutes",
-                    ovenTemp: "180°C (355°F)",
-                    instructions: "1. Preheat oven to 180°C (355°F).\n2. Mix dry ingredients in a bowl.\n3. Mix wet ingredients in another bowl.\n4. Combine and stir until smooth.\n5. Pour into a greased cake pan.\n6. Bake for 30 minutes.\n7. Let cool before serving.",
+                    ovenTemp: "180Â°C (355Â°F)",
+                    instructions: "1. Preheat oven to 180Â°C (355Â°F).\n2. Mix dry ingredients in a bowl.\n3. Mix wet ingredients in another bowl.\n4. Combine and stir until smooth.\n5. Pour into a greased cake pan.\n6. Bake for 30 minutes.\n7. Let cool before serving.",
                     vegan: true
                 },
                 {
@@ -1494,8 +1013,8 @@
                         "1/2 cup almond milk"
                     ],
                     ovenTime: "50 minutes",
-                    ovenTemp: "175°C (350°F)",
-                    instructions: "1. Preheat oven to 175°C (350°F).\n2. Mash bananas.\n3. Mix all ingredients.\n4. Pour into a greased loaf pan.\n5. Bake for 50 minutes.\n6. Let cool before slicing.",
+                    ovenTemp: "175Â°C (350Â°F)",
+                    instructions: "1. Preheat oven to 175Â°C (350Â°F).\n2. Mash bananas.\n3. Mix all ingredients.\n4. Pour into a greased loaf pan.\n5. Bake for 50 minutes.\n6. Let cool before slicing.",
                     vegan: true
                 },
                 {
@@ -1510,8 +1029,8 @@
                         "1/2 tsp baking soda"
                     ],
                     ovenTime: "12 minutes",
-                    ovenTemp: "180°C (355°F)",
-                    instructions: "1. Preheat oven to 180°C (355°F).\n2. Mix all ingredients.\n3. Drop spoonfuls onto baking sheet.\n4. Bake for 12 minutes.\n5. Let cool.",
+                    ovenTemp: "180Â°C (355Â°F)",
+                    instructions: "1. Preheat oven to 180Â°C (355Â°F).\n2. Mix all ingredients.\n3. Drop spoonfuls onto baking sheet.\n4. Bake for 12 minutes.\n5. Let cool.",
                     vegan: true
                 },
                 {
@@ -1528,8 +1047,8 @@
                         "Salt and pepper to taste"
                     ],
                     ovenTime: "40 minutes",
-                    ovenTemp: "180°C (355°F)",
-                    instructions: "1. Preheat oven to 180°C (355°F).\n2. Mix all ingredients.\n3. Press into loaf pan.\n4. Bake for 40 minutes.\n5. Let cool before slicing.",
+                    ovenTemp: "180Â°C (355Â°F)",
+                    instructions: "1. Preheat oven to 180Â°C (355Â°F).\n2. Mix all ingredients.\n3. Press into loaf pan.\n4. Bake for 40 minutes.\n5. Let cool before slicing.",
                     vegan: true
                 },
                 {
@@ -1561,8 +1080,8 @@
                         "1 tsp baking powder"
                     ],
                     ovenTime: "20 minutes",
-                    ovenTemp: "180°C (355°F)",
-                    instructions: "1. Preheat oven to 180°C (355°F). Line a muffin tin with paper liners.\n2. In a large bowl, whisk together gluten-free flour, cocoa powder, baking powder, and sugar.\n3. In a separate bowl, beat eggs, then add oil and milk, mixing well.\n4. Pour wet ingredients into dry ingredients and stir until just combined.\n5. Divide batter evenly among muffin cups, filling each about 2/3 full.\n6. Bake for 20 minutes, or until a toothpick inserted in the center comes out clean.\n7. Let muffins cool in the tin for 5 minutes, then transfer to a wire rack to cool completely. Enjoy!"
+                    ovenTemp: "180Â°C (355Â°F)",
+                    instructions: "1. Preheat oven to 180Â°C (355Â°F). Line a muffin tin with paper liners.\n2. In a large bowl, whisk together gluten-free flour, cocoa powder, baking powder, and sugar.\n3. In a separate bowl, beat eggs, then add oil and milk, mixing well.\n4. Pour wet ingredients into dry ingredients and stir until just combined.\n5. Divide batter evenly among muffin cups, filling each about 2/3 full.\n6. Bake for 20 minutes, or until a toothpick inserted in the center comes out clean.\n7. Let muffins cool in the tin for 5 minutes, then transfer to a wire rack to cool completely. Enjoy!"
                 },
                 {
                     title: "Spinach Quiche",
@@ -1577,8 +1096,8 @@
                         "1/4 tsp black pepper"
                     ],
                     ovenTime: "35 minutes",
-                    ovenTemp: "180°C (355°F)",
-                    instructions: "1. Preheat oven to 180°C (355°F).\n2. Place gluten-free pie crust in a pie dish.\n3. Spread chopped spinach evenly over the crust.\n4. In a bowl, whisk together eggs, milk, cheese, salt, and pepper.\n5. Pour egg mixture over spinach.\n6. Bake for 35 minutes, or until center is set and top is golden.\n7. Let cool for 10 minutes before slicing and serving."
+                    ovenTemp: "180Â°C (355Â°F)",
+                    instructions: "1. Preheat oven to 180Â°C (355Â°F).\n2. Place gluten-free pie crust in a pie dish.\n3. Spread chopped spinach evenly over the crust.\n4. In a bowl, whisk together eggs, milk, cheese, salt, and pepper.\n5. Pour egg mixture over spinach.\n6. Bake for 35 minutes, or until center is set and top is golden.\n7. Let cool for 10 minutes before slicing and serving."
                 },
                 {
                     title: "Chicken Pot Pie",
@@ -1593,8 +1112,8 @@
                         "Salt and pepper to taste"
                     ],
                     ovenTime: "40 minutes",
-                    ovenTemp: "190°C (375°F)",
-                    instructions: "1. Preheat oven to 190°C (375°F).\n2. In a saucepan, cook mixed vegetables until tender.\n3. Add cooked chicken to the pan.\n4. Sprinkle gluten-free flour over mixture and stir well.\n5. Slowly add chicken broth and milk, stirring constantly until thickened.\n6. Season with salt and pepper.\n7. Pour filling into gluten-free pie crust. Cover with another crust or lattice if desired.\n8. Bake for 40 minutes, or until crust is golden brown.\n9. Let cool for 10 minutes before serving."
+                    ovenTemp: "190Â°C (375Â°F)",
+                    instructions: "1. Preheat oven to 190Â°C (375Â°F).\n2. In a saucepan, cook mixed vegetables until tender.\n3. Add cooked chicken to the pan.\n4. Sprinkle gluten-free flour over mixture and stir well.\n5. Slowly add chicken broth and milk, stirring constantly until thickened.\n6. Season with salt and pepper.\n7. Pour filling into gluten-free pie crust. Cover with another crust or lattice if desired.\n8. Bake for 40 minutes, or until crust is golden brown.\n9. Let cool for 10 minutes before serving."
                 },
                 {
                     title: "Falafel",
@@ -1609,8 +1128,8 @@
                         "Salt and pepper to taste"
                     ],
                     ovenTime: "20 minutes",
-                    ovenTemp: "200°C (400°F)",
-                    instructions: "1. Preheat oven to 200°C (400°F) or heat oil for frying.\n2. In a food processor, blend chickpeas, onion, garlic, parsley, gluten-free flour, cumin, salt, and pepper until coarse.\n3. Shape mixture into small balls or patties.\n4. Place on a baking sheet and bake for 20 minutes, turning halfway, or fry in hot oil until golden and crisp.\n5. Serve warm in wraps, salads, or with dipping sauce."
+                    ovenTemp: "200Â°C (400Â°F)",
+                    instructions: "1. Preheat oven to 200Â°C (400Â°F) or heat oil for frying.\n2. In a food processor, blend chickpeas, onion, garlic, parsley, gluten-free flour, cumin, salt, and pepper until coarse.\n3. Shape mixture into small balls or patties.\n4. Place on a baking sheet and bake for 20 minutes, turning halfway, or fry in hot oil until golden and crisp.\n5. Serve warm in wraps, salads, or with dipping sauce."
                 },
                 {
                     title: "Veggie Pizza",
@@ -1623,8 +1142,8 @@
                         "1 tsp dried oregano"
                     ],
                     ovenTime: "18 minutes",
-                    ovenTemp: "220°C (425°F)",
-                    instructions: "1. Preheat oven to 220°C (425°F).\n2. Place pizza base on a baking tray.\n3. Spread tomato sauce evenly over base.\n4. Arrange mixed vegetables and cheese on top.\n5. Sprinkle oregano for flavor.\n6. Bake for 18 minutes, or until cheese is melted and crust is crisp.\n7. Slice and serve hot."
+                    ovenTemp: "220Â°C (425Â°F)",
+                    instructions: "1. Preheat oven to 220Â°C (425Â°F).\n2. Place pizza base on a baking tray.\n3. Spread tomato sauce evenly over base.\n4. Arrange mixed vegetables and cheese on top.\n5. Sprinkle oregano for flavor.\n6. Bake for 18 minutes, or until cheese is melted and crust is crisp.\n7. Slice and serve hot."
                 },
                 {
                     title: "Berry Crisp",
@@ -1637,8 +1156,8 @@
                         "1/4 cup gluten-free flour"
                     ],
                     ovenTime: "30 minutes",
-                    ovenTemp: "180°C (355°F)",
-                    instructions: "1. Preheat oven to 180°C (355°F).\n2. Spread berries in a baking dish.\n3. In a bowl, mix oats, brown sugar, melted butter, and gluten-free flour until crumbly.\n4. Sprinkle topping evenly over berries.\n5. Bake for 30 minutes, or until topping is golden and berries are bubbling.\n6. Let cool slightly before serving. Delicious with ice cream or yogurt."
+                    ovenTemp: "180Â°C (355Â°F)",
+                    instructions: "1. Preheat oven to 180Â°C (355Â°F).\n2. Spread berries in a baking dish.\n3. In a bowl, mix oats, brown sugar, melted butter, and gluten-free flour until crumbly.\n4. Sprinkle topping evenly over berries.\n5. Bake for 30 minutes, or until topping is golden and berries are bubbling.\n6. Let cool slightly before serving. Delicious with ice cream or yogurt."
                 },
                 {
                     title: "Zucchini Bread",
@@ -1654,8 +1173,8 @@
                         "1/2 tsp salt"
                     ],
                     ovenTime: "50 minutes",
-                    ovenTemp: "175°C (350°F)",
-                    instructions: "1. Preheat oven to 175°C (350°F).\n2. In a bowl, mix flour, cinnamon, baking soda, and salt.\n3. In another bowl, beat eggs, then add sugar, oil, and grated zucchini.\n4. Combine wet and dry ingredients, stirring until just mixed.\n5. Pour batter into a greased loaf pan.\n6. Bake for 50 minutes, or until a toothpick comes out clean.\n7. Let cool before slicing."
+                    ovenTemp: "175Â°C (350Â°F)",
+                    instructions: "1. Preheat oven to 175Â°C (350Â°F).\n2. In a bowl, mix flour, cinnamon, baking soda, and salt.\n3. In another bowl, beat eggs, then add sugar, oil, and grated zucchini.\n4. Combine wet and dry ingredients, stirring until just mixed.\n5. Pour batter into a greased loaf pan.\n6. Bake for 50 minutes, or until a toothpick comes out clean.\n7. Let cool before slicing."
                 },
                 {
                     title: "Coconut Macaroons",
@@ -1667,8 +1186,8 @@
                         "1 tsp vanilla extract"
                     ],
                     ovenTime: "15 minutes",
-                    ovenTemp: "180°C (355°F)",
-                    instructions: "1. Preheat oven to 180°C (355°F) and line a baking sheet with parchment paper.\n2. In a bowl, mix coconut, sugar, egg whites, and vanilla until well combined.\n3. Scoop tablespoon-sized mounds onto baking sheet.\n4. Bake for 15 minutes, or until golden.\n5. Let cool and enjoy."
+                    ovenTemp: "180Â°C (355Â°F)",
+                    instructions: "1. Preheat oven to 180Â°C (355Â°F) and line a baking sheet with parchment paper.\n2. In a bowl, mix coconut, sugar, egg whites, and vanilla until well combined.\n3. Scoop tablespoon-sized mounds onto baking sheet.\n4. Bake for 15 minutes, or until golden.\n5. Let cool and enjoy."
                 },
                 {
                     title: "Sweet Potato Fries",
@@ -1680,8 +1199,8 @@
                         "1/2 tsp paprika"
                     ],
                     ovenTime: "25 minutes",
-                    ovenTemp: "220°C (425°F)",
-                    instructions: "1. Preheat oven to 220°C (425°F).\n2. Peel and slice sweet potatoes into thin strips.\n3. Toss with olive oil, salt, and paprika.\n4. Spread fries on a baking sheet in a single layer.\n5. Bake for 25 minutes, turning halfway, until crisp."
+                    ovenTemp: "220Â°C (425Â°F)",
+                    instructions: "1. Preheat oven to 220Â°C (425Â°F).\n2. Peel and slice sweet potatoes into thin strips.\n3. Toss with olive oil, salt, and paprika.\n4. Spread fries on a baking sheet in a single layer.\n5. Bake for 25 minutes, turning halfway, until crisp."
                 },
                 {
                     title: "Black Bean Brownies",
@@ -1695,8 +1214,8 @@
                         "1 tsp vanilla extract"
                     ],
                     ovenTime: "25 minutes",
-                    ovenTemp: "180°C (355°F)",
-                    instructions: "1. Preheat oven to 180°C (355°F) and grease a baking pan.\n2. Blend black beans until smooth.\n3. In a bowl, mix blended beans, eggs, cocoa powder, sugar, oil, and vanilla.\n4. Pour batter into pan and spread evenly.\n5. Bake for 25 minutes.\n6. Let cool before cutting."
+                    ovenTemp: "180Â°C (355Â°F)",
+                    instructions: "1. Preheat oven to 180Â°C (355Â°F) and grease a baking pan.\n2. Blend black beans until smooth.\n3. In a bowl, mix blended beans, eggs, cocoa powder, sugar, oil, and vanilla.\n4. Pour batter into pan and spread evenly.\n5. Bake for 25 minutes.\n6. Let cool before cutting."
                 },
                 {
                     title: "Cheese Biscuits",
@@ -1711,8 +1230,8 @@
                         "1/2 tsp salt"
                     ],
                     ovenTime: "15 minutes",
-                    ovenTemp: "200°C (400°F)",
-                    instructions: "1. Preheat oven to 200°C (400°F).\n2. In a bowl, mix flour, baking powder, and salt.\n3. Cut in cold butter until mixture is crumbly.\n4. Add cheese, milk, and egg. Stir until just combined.\n5. Drop spoonfuls onto baking sheet.\n6. Bake for 15 minutes.\n7. Serve warm."
+                    ovenTemp: "200Â°C (400Â°F)",
+                    instructions: "1. Preheat oven to 200Â°C (400Â°F).\n2. In a bowl, mix flour, baking powder, and salt.\n3. Cut in cold butter until mixture is crumbly.\n4. Add cheese, milk, and egg. Stir until just combined.\n5. Drop spoonfuls onto baking sheet.\n6. Bake for 15 minutes.\n7. Serve warm."
                 },
                 {
                     title: "Pumpkin Bread",
@@ -1729,8 +1248,8 @@
                         "1/2 tsp salt"
                     ],
                     ovenTime: "45 minutes",
-                    ovenTemp: "175°C (350°F)",
-                    instructions: "1. Preheat oven to 175°C (350°F).\n2. In a bowl, mix flour, cinnamon, nutmeg, baking soda, and salt.\n3. In another bowl, beat eggs, then add sugar, oil, and pumpkin puree.\n4. Combine wet and dry ingredients, stirring until just mixed.\n5. Pour batter into a greased loaf pan.\n6. Bake for 45 minutes, or until a toothpick comes out clean.\n7. Let cool before slicing."
+                    ovenTemp: "175Â°C (350Â°F)",
+                    instructions: "1. Preheat oven to 175Â°C (350Â°F).\n2. In a bowl, mix flour, cinnamon, nutmeg, baking soda, and salt.\n3. In another bowl, beat eggs, then add sugar, oil, and pumpkin puree.\n4. Combine wet and dry ingredients, stirring until just mixed.\n5. Pour batter into a greased loaf pan.\n6. Bake for 45 minutes, or until a toothpick comes out clean.\n7. Let cool before slicing."
                 },
                 {
                     title: "Peanut Butter Cookies",
@@ -1742,8 +1261,8 @@
                         "1/2 tsp baking soda"
                     ],
                     ovenTime: "10 minutes",
-                    ovenTemp: "180°C (355°F)",
-                    instructions: "1. Preheat oven to 180°C (355°F) and line a baking sheet with parchment paper.\n2. In a bowl, mix peanut butter, sugar, egg, and baking soda.\n3. Shape dough into balls and place on baking sheet.\n4. Flatten each ball with a fork.\n5. Bake for 10 minutes.\n6. Let cool before serving."
+                    ovenTemp: "180Â°C (355Â°F)",
+                    instructions: "1. Preheat oven to 180Â°C (355Â°F) and line a baking sheet with parchment paper.\n2. In a bowl, mix peanut butter, sugar, egg, and baking soda.\n3. Shape dough into balls and place on baking sheet.\n4. Flatten each ball with a fork.\n5. Bake for 10 minutes.\n6. Let cool before serving."
                 },
                 {
                     title: "Lemon Bars",
@@ -1758,8 +1277,8 @@
                         "1 tbsp cornstarch"
                     ],
                     ovenTime: "30 minutes",
-                    ovenTemp: "180°C (355°F)",
-                    instructions: "1. Preheat oven to 180°C (355°F) and grease a baking dish.\n2. Mix flour, butter, and 1/4 cup sugar to form crust.\n3. Press crust into bottom of dish and bake for 10 minutes.\n4. In a bowl, whisk eggs, lemon juice, 1 cup sugar, and cornstarch.\n5. Pour filling over crust.\n6. Bake for 20 minutes, or until set.\n7. Cool completely and cut into bars."
+                    ovenTemp: "180Â°C (355Â°F)",
+                    instructions: "1. Preheat oven to 180Â°C (355Â°F) and grease a baking dish.\n2. Mix flour, butter, and 1/4 cup sugar to form crust.\n3. Press crust into bottom of dish and bake for 10 minutes.\n4. In a bowl, whisk eggs, lemon juice, 1 cup sugar, and cornstarch.\n5. Pour filling over crust.\n6. Bake for 20 minutes, or until set.\n7. Cool completely and cut into bars."
                 },
                 {
                     title: "Granola Bars",
@@ -1780,16 +1299,16 @@
                     desc: "Moist apple muffins with cinnamon.",
                     ingredients: ["1.5 cups gluten-free flour", "1 cup diced apples", "1/2 cup sugar", "2 eggs", "1/4 cup oil", "1 tsp cinnamon", "1 tsp baking powder"],
                     ovenTime: "18 minutes",
-                    ovenTemp: "180°C (355°F)",
-                    instructions: "1. Preheat oven to 180°C (355°F).\n2. In a bowl, combine gluten-free flour, sugar, baking powder, salt, milk, egg, and melted butter. Mix until smooth.\n3. Pour batter evenly into muffin tin lined with paper cups.\n4. Bake for 18 minutes, or until a toothpick inserted comes out clean.\n5. Remove muffins from oven and let cool completely.\n6. Enjoy."
+                    ovenTemp: "180Â°C (355Â°F)",
+                    instructions: "1. Preheat oven to 180Â°C (355Â°F).\n2. In a bowl, combine gluten-free flour, sugar, baking powder, salt, milk, egg, and melted butter. Mix until smooth.\n3. Pour batter evenly into muffin tin lined with paper cups.\n4. Bake for 18 minutes, or until a toothpick inserted comes out clean.\n5. Remove muffins from oven and let cool completely.\n6. Enjoy."
                 },
                 {
                     title: "Garlic Bread",
                     desc: "Crispy garlic bread with gluten-free baguette.",
                     ingredients: ["1 gluten-free baguette", "1/4 cup butter", "2 cloves garlic", "1 tbsp parsley", "1/2 tsp salt"],
                     ovenTime: "10 minutes",
-                    ovenTemp: "200°C (400°F)",
-                    instructions: "1. Preheat oven to 200°C (400°F).\n2. Slice gluten-free baguette into pieces.\n3. In a bowl, mix softened butter, minced garlic, chopped parsley, and salt.\n4. Spread garlic butter mixture on each slice.\n5. Arrange slices on a baking sheet.\n6. Bake for 10 minutes, until golden and crisp.\n7. Remove from oven and let cool slightly.\n8. Serve hot."
+                    ovenTemp: "200Â°C (400Â°F)",
+                    instructions: "1. Preheat oven to 200Â°C (400Â°F).\n2. Slice gluten-free baguette into pieces.\n3. In a bowl, mix softened butter, minced garlic, chopped parsley, and salt.\n4. Spread garlic butter mixture on each slice.\n5. Arrange slices on a baking sheet.\n6. Bake for 10 minutes, until golden and crisp.\n7. Remove from oven and let cool slightly.\n8. Serve hot."
                 },
                 {
                     title: "Blueberry Pancakes",
@@ -1804,48 +1323,48 @@
                     desc: "Classic vanilla cake with gluten-free flour.",
                     ingredients: ["2 cups gluten-free flour", "1 cup sugar", "2 eggs", "1/2 cup butter", "1 cup milk", "1 tsp vanilla", "1 tsp baking powder"],
                     ovenTime: "30 minutes",
-                    ovenTemp: "180°C (355°F)",
-                    instructions: "1. Preheat oven to 180°C (355°F).\n2. In a bowl, cream butter and sugar, then add eggs and vanilla.\n3. Add gluten-free flour and baking powder, alternating with milk, mixing until smooth.\n4. Pour batter into a greased cake pan.\n5. Bake for 30 minutes, or until a toothpick inserted comes out clean.\n6. Remove cake from oven and let cool completely.\n7. Frost as desired."
+                    ovenTemp: "180Â°C (355Â°F)",
+                    instructions: "1. Preheat oven to 180Â°C (355Â°F).\n2. In a bowl, cream butter and sugar, then add eggs and vanilla.\n3. Add gluten-free flour and baking powder, alternating with milk, mixing until smooth.\n4. Pour batter into a greased cake pan.\n5. Bake for 30 minutes, or until a toothpick inserted comes out clean.\n6. Remove cake from oven and let cool completely.\n7. Frost as desired."
                 },
                 {
                     title: "Bagels",
                     desc: "Chewy, delicious bagels made gluten-free.",
                     ingredients: ["2 cups gluten-free flour", "1 tbsp sugar", "1 tsp yeast", "1 cup warm water", "1/2 tsp salt", "1 egg for brushing"],
                     ovenTime: "20 minutes",
-                    ovenTemp: "220°C (425°F)",
-                    instructions: "1. In a bowl, mix gluten-free flour, sugar, yeast, water, and salt to form a dough.\n2. Knead dough until smooth, then divide and shape into bagels.\n3. Bring a pot of water to a boil and briefly boil each bagel for 1 minute.\n4. Place bagels on a baking sheet and brush with beaten egg.\n5. Bake at 220°C (425°F) for 20 minutes, until golden.\n6. Remove from oven and let cool."
+                    ovenTemp: "220Â°C (425Â°F)",
+                    instructions: "1. In a bowl, mix gluten-free flour, sugar, yeast, water, and salt to form a dough.\n2. Knead dough until smooth, then divide and shape into bagels.\n3. Bring a pot of water to a boil and briefly boil each bagel for 1 minute.\n4. Place bagels on a baking sheet and brush with beaten egg.\n5. Bake at 220Â°C (425Â°F) for 20 minutes, until golden.\n6. Remove from oven and let cool."
                 },
                 {
                     title: "Cinnamon Rolls",
                     desc: "Soft, sweet cinnamon rolls with a gluten-free dough.",
                     ingredients: ["2 cups gluten-free flour", "1/4 cup sugar", "1 tsp yeast", "1 cup warm milk", "1/4 cup butter", "1 egg", "Cinnamon filling", "Icing"],
                     ovenTime: "25 minutes",
-                    ovenTemp: "180°C (355°F)",
-                    instructions: "1. In a bowl, mix gluten-free flour, sugar, yeast, warm milk, butter, and egg to form a dough.\n2. Cover and let dough rise for 1 hour.\n3. Roll out dough on a floured surface.\n4. Spread cinnamon filling evenly over dough.\n5. Roll up dough tightly and slice into rolls.\n6. Arrange rolls in a greased baking dish.\n7. Bake at 180°C (355°F) for 25 minutes, until golden.\n8. Remove from oven and let cool.\n9. Top with icing."
+                    ovenTemp: "180Â°C (355Â°F)",
+                    instructions: "1. In a bowl, mix gluten-free flour, sugar, yeast, warm milk, butter, and egg to form a dough.\n2. Cover and let dough rise for 1 hour.\n3. Roll out dough on a floured surface.\n4. Spread cinnamon filling evenly over dough.\n5. Roll up dough tightly and slice into rolls.\n6. Arrange rolls in a greased baking dish.\n7. Bake at 180Â°C (355Â°F) for 25 minutes, until golden.\n8. Remove from oven and let cool.\n9. Top with icing."
                 },
                 {
                     title: "Brownies",
                     desc: "Fudgy brownies made with gluten-free flour.",
                     ingredients: ["1 cup gluten-free flour", "1/2 cup cocoa powder", "1 cup sugar", "2 eggs", "1/2 cup butter", "1 tsp vanilla"],
                     ovenTime: "25 minutes",
-                    ovenTemp: "180°C (355°F)",
-                    instructions: "1. Preheat oven to 180°C (355°F).\n2. In a bowl, mix gluten-free flour, cocoa powder, sugar, eggs, butter, and vanilla until smooth.\n3. Pour batter into a greased pan and spread evenly.\n4. Bake for 25 minutes, or until set.\n5. Remove from oven and let cool completely.\n6. Cut into squares."
+                    ovenTemp: "180Â°C (355Â°F)",
+                    instructions: "1. Preheat oven to 180Â°C (355Â°F).\n2. In a bowl, mix gluten-free flour, cocoa powder, sugar, eggs, butter, and vanilla until smooth.\n3. Pour batter into a greased pan and spread evenly.\n4. Bake for 25 minutes, or until set.\n5. Remove from oven and let cool completely.\n6. Cut into squares."
                 },
                 {
                     title: "Scones",
                     desc: "Tender scones perfect for tea time.",
                     ingredients: ["2 cups gluten-free flour", "1/4 cup sugar", "1/2 cup butter", "1/2 cup milk", "1 egg", "1 tsp baking powder", "Dried fruit (optional)"],
                     ovenTime: "15 minutes",
-                    ovenTemp: "200°C (400°F)",
-                    instructions: "1. Preheat oven to 200°C (400°F).\n2. In a bowl, mix gluten-free flour, sugar, baking powder, and dried fruit if using.\n3. In another bowl, whisk together milk, egg, and melted butter.\n4. Combine wet and dry ingredients, stirring until just mixed.\n5. Shape dough into rounds and place on a baking sheet.\n6. Bake for 15 minutes, until golden.\n7. Remove from oven and let cool."
+                    ovenTemp: "200Â°C (400Â°F)",
+                    instructions: "1. Preheat oven to 200Â°C (400Â°F).\n2. In a bowl, mix gluten-free flour, sugar, baking powder, and dried fruit if using.\n3. In another bowl, whisk together milk, egg, and melted butter.\n4. Combine wet and dry ingredients, stirring until just mixed.\n5. Shape dough into rounds and place on a baking sheet.\n6. Bake for 15 minutes, until golden.\n7. Remove from oven and let cool."
                 },
                 {
                     title: "Cupcakes",
                     desc: "Moist cupcakes with gluten-free flour.",
                     ingredients: ["1.5 cups gluten-free flour", "1/2 cup sugar", "2 eggs", "1/2 cup butter", "1/2 cup milk", "1 tsp baking powder", "Frosting"],
                     ovenTime: "18 minutes",
-                    ovenTemp: "180°C (355°F)",
-                    instructions: "1. Preheat oven to 180°C (355°F).\n2. In a bowl, mix gluten-free flour, sugar, baking powder, eggs, butter, and milk until smooth.\n3. Pour batter into cupcake liners, filling each 2/3 full.\n4. Bake for 18 minutes, or until a toothpick inserted comes out clean.\n5. Remove from oven and let cool completely.\n6. Frost as desired."
+                    ovenTemp: "180Â°C (355Â°F)",
+                    instructions: "1. Preheat oven to 180Â°C (355Â°F).\n2. In a bowl, mix gluten-free flour, sugar, baking powder, eggs, butter, and milk until smooth.\n3. Pour batter into cupcake liners, filling each 2/3 full.\n4. Bake for 18 minutes, or until a toothpick inserted comes out clean.\n5. Remove from oven and let cool completely.\n6. Frost as desired."
                 },
                 {
                     title: "Flatbread",
@@ -1860,8 +1379,8 @@
                     desc: "Baked donuts with a gluten-free batter.",
                     ingredients: ["1.5 cups gluten-free flour", "1/2 cup sugar", "1/2 cup milk", "1/4 cup butter", "1 egg", "1 tsp baking powder", "Cinnamon sugar (optional)"],
                     ovenTime: "12 minutes",
-                    ovenTemp: "180°C (355°F)",
-                    instructions: "1. Preheat oven to 180°C (355°F).\n2. In a bowl, mix gluten-free flour, sugar, baking powder, milk, butter, and egg until smooth.\n3. Pour batter into a greased donut pan.\n4. Bake for 12 minutes, or until donuts spring back when touched.\n5. Remove from oven and let cool.\n6. Toss in cinnamon sugar if desired."
+                    ovenTemp: "180Â°C (355Â°F)",
+                    instructions: "1. Preheat oven to 180Â°C (355Â°F).\n2. In a bowl, mix gluten-free flour, sugar, baking powder, milk, butter, and egg until smooth.\n3. Pour batter into a greased donut pan.\n4. Bake for 12 minutes, or until donuts spring back when touched.\n5. Remove from oven and let cool.\n6. Toss in cinnamon sugar if desired."
                 },
                 {
                     title: "Waffles",
@@ -1876,56 +1395,56 @@
                     desc: "Classic buttery shortbread cookies.",
                     ingredients: ["2 cups gluten-free flour", "1 cup butter", "1/2 cup sugar", "1/2 tsp salt"],
                     ovenTime: "15 minutes",
-                    ovenTemp: "180°C (355°F)",
-                    instructions: "1. Preheat oven to 180°C (355°F).\n2. In a bowl, mix gluten-free flour, butter, sugar, and salt until dough forms.\n3. Shape dough into cookies and place on a baking sheet.\n4. Bake for 15 minutes, until edges are golden.\n5. Remove from oven and let cool.\n6. Enjoy."
+                    ovenTemp: "180Â°C (355Â°F)",
+                    instructions: "1. Preheat oven to 180Â°C (355Â°F).\n2. In a bowl, mix gluten-free flour, butter, sugar, and salt until dough forms.\n3. Shape dough into cookies and place on a baking sheet.\n4. Bake for 15 minutes, until edges are golden.\n5. Remove from oven and let cool.\n6. Enjoy."
                 },
                 {
                     title: "Breadsticks",
                     desc: "Soft, chewy breadsticks for dipping.",
                     ingredients: ["2 cups gluten-free flour", "1 tsp yeast", "1 cup warm water", "1 tbsp olive oil", "1/2 tsp salt"],
                     ovenTime: "18 minutes",
-                    ovenTemp: "220°C (425°F)",
-                    instructions: "1. In a bowl, mix gluten-free flour, yeast, warm water, olive oil, and salt to form a dough.\n2. Shape dough into sticks and place on a baking sheet.\n3. Cover and let rise for 30 minutes.\n4. Bake at 220°C (425°F) for 18 minutes, until golden.\n5. Remove from oven and let cool."
+                    ovenTemp: "220Â°C (425Â°F)",
+                    instructions: "1. In a bowl, mix gluten-free flour, yeast, warm water, olive oil, and salt to form a dough.\n2. Shape dough into sticks and place on a baking sheet.\n3. Cover and let rise for 30 minutes.\n4. Bake at 220Â°C (425Â°F) for 18 minutes, until golden.\n5. Remove from oven and let cool."
                 },
                 {
                     title: "Banana Bread",
                     desc: "Moist, delicious banana bread with no gluten.",
                     ingredients: ["3 ripe bananas", "2 cups gluten-free flour", "1/2 cup sugar", "2 eggs", "1/4 cup oil", "1 tsp baking soda", "1/2 tsp salt"],
                     ovenTime: "50 minutes",
-                    ovenTemp: "175°C (350°F)",
-                    instructions: "1. Preheat oven to 175°C (350°F).\n2. Mash bananas in a bowl.\n3. Add gluten-free flour, sugar, eggs, oil, baking soda, and salt. Mix until combined.\n4. Pour batter into a greased loaf pan.\n5. Bake for 50 minutes, or until a toothpick inserted comes out clean.\n6. Remove from oven and let cool.\n7. Slice and serve."
+                    ovenTemp: "175Â°C (350Â°F)",
+                    instructions: "1. Preheat oven to 175Â°C (350Â°F).\n2. Mash bananas in a bowl.\n3. Add gluten-free flour, sugar, eggs, oil, baking soda, and salt. Mix until combined.\n4. Pour batter into a greased loaf pan.\n5. Bake for 50 minutes, or until a toothpick inserted comes out clean.\n6. Remove from oven and let cool.\n7. Slice and serve."
                 },
                 {
                     title: "Almond Flour Chocolate Cake",
                     desc: "Rich chocolate cake made with almond flour.",
                     ingredients: ["2 cups almond flour", "1/2 cup cocoa powder", "3/4 cup sugar", "3 eggs", "1/2 cup milk", "1/4 cup oil", "1 tsp baking powder"],
                     ovenTime: "35 minutes",
-                    ovenTemp: "180°C (355°F)",
-                    instructions: "1. Preheat oven to 180°C (355°F).\n2. In one bowl, mix almond flour, cocoa powder, sugar, and baking powder.\n3. In another bowl, whisk eggs, milk, and oil.\n4. Combine wet and dry ingredients, mixing until smooth.\n5. Pour batter into a greased cake pan.\n6. Bake for 35 minutes, or until a toothpick inserted comes out clean.\n7. Remove from oven and let cool.\n8. Serve."
+                    ovenTemp: "180Â°C (355Â°F)",
+                    instructions: "1. Preheat oven to 180Â°C (355Â°F).\n2. In one bowl, mix almond flour, cocoa powder, sugar, and baking powder.\n3. In another bowl, whisk eggs, milk, and oil.\n4. Combine wet and dry ingredients, mixing until smooth.\n5. Pour batter into a greased cake pan.\n6. Bake for 35 minutes, or until a toothpick inserted comes out clean.\n7. Remove from oven and let cool.\n8. Serve."
                 },
                 {
                     title: "Oatmeal Raisin Cookies",
                     desc: "Chewy cookies with gluten-free oats and raisins.",
                     ingredients: ["2 cups gluten-free oats", "1 cup raisins", "1/2 cup butter", "1/2 cup sugar", "1 egg", "1 tsp cinnamon", "1/2 tsp baking soda"],
                     ovenTime: "12 minutes",
-                    ovenTemp: "180°C (355°F)",
-                    instructions: "1. Preheat oven to 180°C (355°F).\n2. In a bowl, mix gluten-free oats, raisins, butter, sugar, egg, cinnamon, and baking soda until combined.\n3. Drop spoonfuls of dough onto a baking sheet lined with parchment paper.\n4. Bake for 12 minutes, until edges are golden.\n5. Remove from oven and let cool."
+                    ovenTemp: "180Â°C (355Â°F)",
+                    instructions: "1. Preheat oven to 180Â°C (355Â°F).\n2. In a bowl, mix gluten-free oats, raisins, butter, sugar, egg, cinnamon, and baking soda until combined.\n3. Drop spoonfuls of dough onto a baking sheet lined with parchment paper.\n4. Bake for 12 minutes, until edges are golden.\n5. Remove from oven and let cool."
                 },
                 {
                     title: "Lemon Poppy Seed Muffins",
                     desc: "Bright, zesty muffins perfect for breakfast.",
                     ingredients: ["2 cups gluten-free flour", "1/2 cup sugar", "2 eggs", "1/2 cup oil", "1/4 cup lemon juice", "1 tbsp poppy seeds", "1 tsp baking powder"],
                     ovenTime: "20 minutes",
-                    ovenTemp: "190°C (375°F)",
-                    instructions: "1. Preheat oven to 190°C (375°F).\n2. In a bowl, mix gluten-free flour, sugar, baking powder, eggs, oil, lemon juice, and poppy seeds until smooth.\n3. Pour batter into muffin tin lined with paper cups.\n4. Bake for 20 minutes, or until a toothpick inserted comes out clean.\n5. Remove from oven and let cool.\n6. Enjoy."
+                    ovenTemp: "190Â°C (375Â°F)",
+                    instructions: "1. Preheat oven to 190Â°C (375Â°F).\n2. In a bowl, mix gluten-free flour, sugar, baking powder, eggs, oil, lemon juice, and poppy seeds until smooth.\n3. Pour batter into muffin tin lined with paper cups.\n4. Bake for 20 minutes, or until a toothpick inserted comes out clean.\n5. Remove from oven and let cool.\n6. Enjoy."
                 },
                 {
                     title: "Pizza",
                     desc: "Crispy gluten-free pizza crust with your favorite toppings.",
                     ingredients: ["2 cups gluten-free flour", "1 tsp yeast", "1 cup warm water", "1 tbsp olive oil", "1/2 tsp salt", "Pizza sauce", "Cheese", "Toppings"],
                     ovenTime: "18 minutes",
-                    ovenTemp: "220°C (425°F)",
-                    instructions: "1. In a bowl, mix gluten-free flour, yeast, warm water, olive oil, and salt to form a dough.\n2. Cover and let rise for 1 hour.\n3. Shape dough into a pizza base and place on a baking tray.\n4. Spread pizza sauce, cheese, and toppings over dough.\n5. Bake at 220°C (425°F) for 18 minutes, until crust is crisp and cheese is melted.\n6. Remove from oven and let cool."
+                    ovenTemp: "220Â°C (425Â°F)",
+                    instructions: "1. In a bowl, mix gluten-free flour, yeast, warm water, olive oil, and salt to form a dough.\n2. Cover and let rise for 1 hour.\n3. Shape dough into a pizza base and place on a baking tray.\n4. Spread pizza sauce, cheese, and toppings over dough.\n5. Bake at 220Â°C (425Â°F) for 18 minutes, until crust is crisp and cheese is melted.\n6. Remove from oven and let cool."
                 },
                 {
                     title: "Pancakes",
@@ -1940,32 +1459,32 @@
                     desc: "Soft, herby gluten-free focaccia bread.",
                     ingredients: ["2 cups gluten-free flour", "1 cup warm water", "1 tbsp olive oil", "1 tsp yeast", "1/2 tsp salt", "Rosemary", "Sea salt"],
                     ovenTime: "25 minutes",
-                    ovenTemp: "200°C (400°F)",
-                    instructions: "1. In a bowl, mix gluten-free flour, warm water, olive oil, yeast, and salt to form a dough.\n2. Cover and let rise for 1 hour.\n3. Spread dough evenly in a greased pan.\n4. Drizzle olive oil over dough.\n5. Sprinkle rosemary and sea salt on top.\n6. Bake at 200°C (400°F) for 25 minutes, until golden.\n7. Remove from oven and let cool."
+                    ovenTemp: "200Â°C (400Â°F)",
+                    instructions: "1. In a bowl, mix gluten-free flour, warm water, olive oil, yeast, and salt to form a dough.\n2. Cover and let rise for 1 hour.\n3. Spread dough evenly in a greased pan.\n4. Drizzle olive oil over dough.\n5. Sprinkle rosemary and sea salt on top.\n6. Bake at 200Â°C (400Â°F) for 25 minutes, until golden.\n7. Remove from oven and let cool."
                 },
                 {
                     title: "Chocolate Chip Cookies",
                     desc: "Classic chocolate chip cookies made gluten-free.",
                     ingredients: ["2 cups gluten-free flour", "1 cup chocolate chips", "1/2 cup butter", "1/2 cup sugar", "1 egg", "1 tsp vanilla", "1/2 tsp baking soda"],
                     ovenTime: "10 minutes",
-                    ovenTemp: "180°C (355°F)",
-                    instructions: "1. Preheat oven to 180°C (355°F).\n2. In a bowl, mix gluten-free flour, chocolate chips, butter, sugar, egg, vanilla, and baking soda until combined.\n3. Drop spoonfuls of dough onto a baking sheet lined with parchment paper.\n4. Bake for 10 minutes, until edges are golden.\n5. Remove from oven and let cool."
+                    ovenTemp: "180Â°C (355Â°F)",
+                    instructions: "1. Preheat oven to 180Â°C (355Â°F).\n2. In a bowl, mix gluten-free flour, chocolate chips, butter, sugar, egg, vanilla, and baking soda until combined.\n3. Drop spoonfuls of dough onto a baking sheet lined with parchment paper.\n4. Bake for 10 minutes, until edges are golden.\n5. Remove from oven and let cool."
                 },
                 {
                     title: "Apple Crisp",
                     desc: "Warm apple crisp with gluten-free oat topping.",
                     ingredients: ["4 apples", "1 cup gluten-free oats", "1/2 cup brown sugar", "1/2 cup butter", "1/2 cup gluten-free flour", "1 tsp cinnamon"],
                     ovenTime: "40 minutes",
-                    ovenTemp: "180°C (355°F)",
-                    instructions: "1. Preheat oven to 180°C (355°F).\n2. Slice apples and layer them in a baking dish.\n3. In a bowl, mix gluten-free oats, brown sugar, melted butter, gluten-free flour, and cinnamon to form a crumbly topping.\n4. Sprinkle topping evenly over apples.\n5. Bake for 40 minutes, until topping is golden and apples are tender.\n6. Remove from oven and let cool."
+                    ovenTemp: "180Â°C (355Â°F)",
+                    instructions: "1. Preheat oven to 180Â°C (355Â°F).\n2. Slice apples and layer them in a baking dish.\n3. In a bowl, mix gluten-free oats, brown sugar, melted butter, gluten-free flour, and cinnamon to form a crumbly topping.\n4. Sprinkle topping evenly over apples.\n5. Bake for 40 minutes, until topping is golden and apples are tender.\n6. Remove from oven and let cool."
                 },
                 {
                     title: "Carrot Cake",
                     desc: "Moist carrot cake with cream cheese frosting.",
                     ingredients: ["2 cups gluten-free flour", "2 cups grated carrots", "1 cup sugar", "2 eggs", "1/2 cup oil", "1 tsp cinnamon", "1/2 tsp baking soda", "Cream cheese frosting"],
                     ovenTime: "35 minutes",
-                    ovenTemp: "180°C (355°F)",
-                    instructions: "1. Preheat oven to 180°C (355°F).\n2. In a bowl, mix gluten-free flour, grated carrots, sugar, eggs, oil, cinnamon, and baking soda until smooth.\n3. Pour batter into a greased cake pan.\n4. Bake for 35 minutes, or until a toothpick inserted comes out clean.\n5. Remove from oven and let cool completely.\n6. Frost with cream cheese frosting."
+                    ovenTemp: "180Â°C (355Â°F)",
+                    instructions: "1. Preheat oven to 180Â°C (355Â°F).\n2. In a bowl, mix gluten-free flour, grated carrots, sugar, eggs, oil, cinnamon, and baking soda until smooth.\n3. Pour batter into a greased cake pan.\n4. Bake for 35 minutes, or until a toothpick inserted comes out clean.\n5. Remove from oven and let cool completely.\n6. Frost with cream cheese frosting."
                 }
             ];
 

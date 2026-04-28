@@ -1,0 +1,495 @@
+﻿/* Calculator modal and form styling to match others */
+#calculatorModal .modal-content {
+    background: #fff;
+    border-radius: 1.2rem;
+    padding: 2rem 1.5rem 2.5rem 1.5rem;
+    max-width: 95vw;
+    width: 350px;
+    position: relative;
+}
+
+#calculatorModal h2 {
+    color: #4a7c59;
+    font-size: 1.3rem;
+    text-align: center;
+    margin-top: 0;
+}
+
+#calculatorForm {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    align-items: center;
+}
+
+#calcDisplay {
+    width: 220px;
+    font-size: 1.15rem;
+    text-align: right;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 3px solid #6ab187;
+    background: #ffffff;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.calc-btn {
+    background: #eaf6ee;
+    color: #4a7c59;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.7rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.calc-btn:hover {
+    background: #6ab187;
+    color: #fff;
+}
+
+.calc-btn[data-value="="] {
+    background: #4a7c59;
+    color: #fff;
+    grid-column: span 4;
+}
+
+.calc-btn[data-value="="]:hover {
+    background: #388e5c;
+}
+
+@media (min-width: 800px) {
+    #calculatorModal .modal-content {
+        width: 415px;
+        min-width: 400px;
+    }
+}
+
+@media (max-width: 400px) {
+    #calculatorModal .modal-content {
+        padding: 1rem 0.5rem 1rem 0.5rem;
+        width: 98vw;
+    }
+
+    #calcDisplay {
+        width: 98vw;
+    }
+}
+
+/* Right sidebar (heart menu) styles */
+.right-sidebar-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 75vw;
+    max-width: 320px;
+    min-width: 220px;
+    background: #fff;
+    /* box-shadow removed */
+    z-index: 2100;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(.4, 0, .2, 1);
+    display: flex;
+    flex-direction: column;
+    padding-top: 0;
+}
+
+.right-sidebar-menu.show {
+    transform: translateX(0);
+}
+
+.right-sidebar-header {
+    display: flex;
+    align-items: center;
+    padding: 1.2rem 1.2rem 0.5rem 1.2rem;
+    border-bottom: 1px solid #eee;
+}
+
+.right-sidebar-menu-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.5rem;
+}
+
+.right-sidebar-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.18);
+    z-index: 2000;
+}
+
+.right-sidebar-backdrop.show {
+    display: block;
+}
+
+@media (max-width: 600px) {
+    .right-sidebar-menu {
+        width: 90vw;
+        min-width: 0;
+        max-width: 98vw;
+    }
+}
+
+html {
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f8f8f8 url('pattern.png') repeat;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: #6ab187;
+    color: white;
+    padding: 2.0vw 0 2vw 0;
+    text-align: center;
+    position: relative;
+}
+
+.header-icon {
+    position: absolute;
+    top: 1.5vw;
+    width: 8vw;
+    max-width: 40px;
+    min-width: 28px;
+    height: 8vw;
+    max-height: 40px;
+    min-height: 28px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.menu-icon {
+    left: 2vw;
+}
+
+.heart-icon {
+    right: 2vw;
+}
+
+h1 {
+    font-size: clamp(1.2rem, 5vw, 3rem);
+    margin: 0.5rem 0 1.2rem 0;
+}
+
+header p {
+    font-size: clamp(0.9rem, 2.2vw, 1.4rem);
+    margin: 0 0 0.5rem 0;
+}
+
+.container {
+    max-width: 800px;
+    width: 92vw;
+    margin: 3vw auto;
+    background: white;
+    padding: 5vw 2vw;
+    border-radius: 2vw;
+    border: 5px solid #6ab187;
+    /* box-shadow removed */
+}
+
+#searchBar {
+    width: 100%;
+    padding: 1vw 0.5vw;
+    font-size: 0.95rem;
+    border: 2px solid #6ab187;
+    border-radius: 0.7vw;
+    margin-bottom: 4vw;
+}
+
+.recipe-list {
+    list-style: none;
+    padding: 0;
+}
+
+.recipe-item {
+    padding: 3vw 0;
+    border-bottom: 1px solid #eee;
+}
+
+.recipe-item:last-child {
+    border-bottom: none;
+}
+
+.recipe-title {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #4a7c59;
+}
+
+.recipe-desc {
+    color: #555;
+    margin-top: 0.5rem;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 6vw 4vw;
+        width: 96vw;
+    }
+
+    #searchBar {
+        font-size: 0.9rem;
+        padding: 0.6rem 0.5rem;
+    }
+
+    .header-icon {
+        min-width: 24px;
+        min-height: 24px;
+        max-width: 32px;
+        max-height: 32px;
+    }
+}
+
+@media (max-width: 400px) {
+    .container {
+        padding: 4vw 3vw;
+        width: 98vw;
+    }
+}
+
+/* Tablet */
+@media (min-width: 601px) and (max-width: 900px) {
+    .container {
+        padding: 3vw 3vw;
+        width: 94vw;
+    }
+}
+
+/* Large screens — stop vw from growing unbounded */
+@media (min-width: 1100px) {
+    header {
+        padding: 1.5rem 0;
+    }
+
+    .container {
+        margin: 2rem auto;
+        padding: 2.5rem 2.5rem;
+        border-radius: 1rem;
+    }
+
+    #searchBar {
+        padding: 0.6rem 0.8rem;
+        margin-bottom: 1.5rem;
+        border-radius: 0.5rem;
+    }
+
+    .recipe-item {
+        padding: 1.2rem 0;
+    }
+}
+
+/* Modal styles for converter */
+.modal-converter {
+    display: none;
+    position: fixed;
+    z-index: 3000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+    background: rgba(0, 0, 0, 0.25);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-converter.show {
+    display: flex;
+}
+
+.modal-content {
+    background: #fff;
+    margin: auto;
+    border-radius: 1.2rem;
+    padding: 2rem 1.5rem 1.2rem 1.5rem;
+    max-width: 95vw;
+    width: 350px;
+    border: 4px solid #6ab187;
+    /* box-shadow removed */
+    position: relative;
+}
+
+@media (min-width: 800px) {
+    .modal-content {
+        width: 415px;
+        min-width: 400px;
+    }
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #4a7c59;
+    cursor: pointer;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    color: #4a7c59;
+    font-size: 1.3rem;
+    text-align: center;
+}
+
+.converter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.converter-form input,
+.converter-form select {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    border: 2px solid #6ab187;
+}
+
+.converter-form button {
+    background: #6ab187;
+    color: #fff;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.7rem;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.converter-result {
+    text-align: center;
+    margin-top: 0.5rem;
+    color: #333;
+    font-weight: bold;
+}
+
+@media (max-width: 400px) {
+    .modal-content {
+        padding: 1rem 0.5rem 1rem 0.5rem;
+        width: 98vw;
+    }
+}
+
+/* Fluid width for modal form inputs, selects, and buttons */
+.modal-form-field {
+    width: min(220px, 100%);
+    box-sizing: border-box;
+}
+
+/* Sidebar menu styles */
+.sidebar-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 75vw;
+    max-width: 320px;
+    min-width: 220px;
+    background: #fff;
+    /* box-shadow removed */
+    z-index: 2000;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(.4, 0, .2, 1);
+    display: flex;
+    flex-direction: column;
+    padding-top: 0;
+}
+
+.sidebar-menu.show {
+    transform: translateX(0);
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    padding: 1.2rem 1.2rem 0.5rem 1.2rem;
+    border-bottom: 1px solid #eee;
+}
+
+.sidebar-menu-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.5rem;
+}
+
+.sidebar-menu-list {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 0;
+}
+
+.sidebar-menu-list button {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 1rem 1.5rem;
+    text-align: left;
+    font-size: 1.1rem;
+    color: #333;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.sidebar-menu-list button:hover {
+    background: #f0f0f0;
+}
+
+.sidebar-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.18);
+    z-index: 1500;
+}
+
+.sidebar-backdrop.show {
+    display: block;
+}
+
+@media (max-width: 600px) {
+    .sidebar-menu {
+        width: 90vw;
+        min-width: 0;
+        max-width: 98vw;
+    }
+}
