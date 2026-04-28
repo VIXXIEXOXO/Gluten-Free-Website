@@ -101,7 +101,8 @@
             <h2>Converter</h2>
             <form class="converter-form" id="converterForm" autocomplete="off"
                 style="display:flex;flex-direction:column;align-items:center;">
-                <input type="number" id="convertValue" placeholder="Enter value" min="0" step="any" required class="modal-form-field">
+                <input type="number" id="convertValue" placeholder="Enter value" min="0" step="any" required
+                    class="modal-form-field">
                 <select id="convertFrom" class="modal-form-field">
                     <option value="cups">Cups</option>
                     <option value="tablespoons">Tablespoons</option>
@@ -290,7 +291,7 @@
             <!-- Recipes will appear here -->
         </ul>
     </div>
-    <div class="container" id="profileContainer" style="display:none;width:92vw;max-width:800px;margin:2.5vw auto;">
+    <div class="container" id="profileContainer" style="display:none;width:90vw;max-width:680px;margin:2.5vw auto;">
         <h2 style="color:#4a7c59;text-align:center;margin-bottom:2.2rem;">User Account</h2>
         <div id="authForms">
             <form id="registerForm" style="margin-bottom:2rem;">
@@ -383,6 +384,10 @@
                 style="background:#e57373;color:#fff;border:none;padding:0.7rem 1.5rem;border-radius:0.5rem;font-size:1rem;cursor:pointer;margin-top:0.4rem;margin-bottom:2.2rem;">Logout</button>
         </div>
     </div>
+    <footer class="site-footer">
+        <p>© 2026 Brightform Studios</p>
+    </footer>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // ...existing code...
@@ -557,7 +562,7 @@
                     authForms.style.display = 'none';
                     profileInfo.style.display = '';
                     profileEmail.textContent = 'Logged in as: ' + currentUser.email;
-                    profileContainer.style.display = '';
+                    profileContainer.style.display = 'none';
                     // Load display name from Firestore
                     db.collection('users').doc(currentUser.uid).get().then(doc => {
                         if (doc.exists) {
@@ -593,8 +598,7 @@
                     profileInfo.style.display = 'none';
                     profileEmail.textContent = '';
                     updateDisplayNameUI('');
-                    // Hide profile container unless user opens it
-                    // profileContainer.style.display = 'none';
+                    profileContainer.style.display = 'none';
                 }
             }
 
@@ -1479,6 +1483,60 @@
                     instructions: "1. Preheat oven to 180Â°C (355Â°F).\n2. Slice apples and layer them in a baking dish.\n3. In a bowl, mix gluten-free oats, brown sugar, melted butter, gluten-free flour, and cinnamon to form a crumbly topping.\n4. Sprinkle topping evenly over apples.\n5. Bake for 40 minutes, until topping is golden and apples are tender.\n6. Remove from oven and let cool."
                 },
                 {
+                    title: "Vegan Chickpea Blondies",
+                    desc: "Soft blondies made with chickpeas, almond butter, and dark chocolate.",
+                    ingredients: ["1 can chickpeas, drained and rinsed", "1/2 cup almond butter", "1/3 cup maple syrup", "1 tsp vanilla extract", "1/2 tsp baking soda", "1/3 cup vegan dark chocolate chips"],
+                    ovenTime: "22 minutes",
+                    ovenTemp: "175Â°C (350Â°F)",
+                    instructions: "1. Preheat oven to 175Â°C (350Â°F) and line a square pan.\n2. Blend chickpeas, almond butter, maple syrup, vanilla, and baking soda until smooth.\n3. Fold in dark chocolate chips.\n4. Spread batter into the pan.\n5. Bake for 22 minutes until the top is set.\n6. Cool fully before slicing.",
+                    vegan: true
+                },
+                {
+                    title: "Vegan Lemon Coconut Loaf",
+                    desc: "Bright lemon loaf with coconut flavor and a tender crumb.",
+                    ingredients: ["2 cups gluten-free flour", "1/2 cup coconut sugar", "1/2 cup coconut milk", "1/4 cup coconut oil", "1/4 cup lemon juice", "1 tbsp lemon zest", "1 tsp baking powder", "1/2 tsp baking soda"],
+                    ovenTime: "45 minutes",
+                    ovenTemp: "180Â°C (355Â°F)",
+                    instructions: "1. Preheat oven to 180Â°C (355Â°F) and grease a loaf pan.\n2. Mix flour, coconut sugar, baking powder, and baking soda in a bowl.\n3. Stir in coconut milk, coconut oil, lemon juice, and lemon zest.\n4. Pour batter into loaf pan.\n5. Bake for 45 minutes until a toothpick comes out clean.\n6. Cool before slicing.",
+                    vegan: true
+                },
+                {
+                    title: "Vegan Spinach Feta Muffins",
+                    desc: "Savory breakfast muffins with spinach and dairy-free feta.",
+                    ingredients: ["1.5 cups gluten-free flour", "1 cup chopped spinach", "1/2 cup vegan feta crumbles", "1 tbsp olive oil", "1 cup unsweetened almond milk", "1 tsp baking powder", "1/2 tsp salt", "1/4 tsp black pepper"],
+                    ovenTime: "20 minutes",
+                    ovenTemp: "190Â°C (375Â°F)",
+                    instructions: "1. Preheat oven to 190Â°C (375Â°F) and line a muffin tin.\n2. Mix flour, baking powder, salt, and pepper.\n3. Add almond milk and olive oil, then fold in spinach and vegan feta.\n4. Divide batter into muffin cups.\n5. Bake for 20 minutes until lightly golden.\n6. Let cool slightly and serve warm.",
+                    vegan: true
+                },
+                {
+                    title: "Vegan Tomato Basil Flatbread",
+                    desc: "Crisp flatbread topped with tomato, basil, and olive oil.",
+                    ingredients: ["2 cups gluten-free flour", "1 cup warm water", "1 tbsp olive oil", "1/2 tsp salt", "1 chopped tomato", "2 tbsp chopped basil"],
+                    ovenTime: "16 minutes",
+                    ovenTemp: "220Â°C (425Â°F)",
+                    instructions: "1. Preheat oven to 220Â°C (425Â°F).\n2. Mix flour, warm water, olive oil, and salt into a soft dough.\n3. Press dough onto a baking tray.\n4. Top with chopped tomato and basil.\n5. Bake for 16 minutes until edges are crisp.\n6. Slice and serve.",
+                    vegan: true
+                },
+                {
+                    title: "Vegan Apple Cinnamon Waffles",
+                    desc: "Crispy waffles with grated apple and warm cinnamon.",
+                    ingredients: ["1.5 cups gluten-free flour", "1 tbsp coconut sugar", "1 tsp baking powder", "1/2 tsp cinnamon", "1 cup oat milk", "2 tbsp melted coconut oil", "1/2 cup grated apple"],
+                    ovenTime: "Cook in waffle iron",
+                    ovenTemp: "Waffle iron",
+                    instructions: "1. In a bowl, whisk flour, coconut sugar, baking powder, and cinnamon.\n2. Add oat milk and coconut oil, mixing until smooth.\n3. Fold in grated apple.\n4. Pour batter into preheated waffle iron.\n5. Cook until golden and crisp.\n6. Serve warm.",
+                    vegan: true
+                },
+                {
+                    title: "Vegan Sweet Potato Brownies",
+                    desc: "Rich brownies made with sweet potato puree and cocoa.",
+                    ingredients: ["1 cup mashed sweet potato", "3/4 cup gluten-free flour", "1/3 cup cocoa powder", "1/3 cup maple syrup", "1/4 cup coconut oil", "1 tsp vanilla extract", "1/2 tsp baking soda"],
+                    ovenTime: "24 minutes",
+                    ovenTemp: "180Â°C (355Â°F)",
+                    instructions: "1. Preheat oven to 180Â°C (355Â°F) and line a baking pan.\n2. Mix sweet potato, maple syrup, coconut oil, and vanilla.\n3. Stir in flour, cocoa powder, and baking soda until combined.\n4. Spread batter into the pan.\n5. Bake for 24 minutes.\n6. Cool completely before slicing.",
+                    vegan: true
+                },
+                {
                     title: "Carrot Cake",
                     desc: "Moist carrot cake with cream cheese frosting.",
                     ingredients: ["2 cups gluten-free flour", "2 cups grated carrots", "1 cup sugar", "2 eggs", "1/2 cup oil", "1 tsp cinnamon", "1/2 tsp baking soda", "Cream cheese frosting"],
@@ -1492,6 +1550,31 @@
             let favorites = [];
             // Firestore reference
             const db = firebase.firestore();
+
+            function normalizeMojibake(text) {
+                if (typeof text !== 'string') return text;
+                return text.replace(/Â/g, '');
+            }
+
+            // Normalize recipe strings that may contain encoding artifacts.
+            recipes.forEach(recipe => {
+                recipe.ovenTemp = normalizeMojibake(recipe.ovenTemp);
+                recipe.instructions = normalizeMojibake(recipe.instructions);
+            });
+
+            function toggleFavorite(recipe) {
+                if (favorites.includes(recipe)) {
+                    favorites = favorites.filter(f => f !== recipe);
+                } else {
+                    favorites.push(recipe);
+                }
+                updateFavoritesSidebar();
+                if (currentUser) {
+                    saveFavoritesToCloud();
+                } else {
+                    saveFavoritesToLocal();
+                }
+            }
 
             function saveFavoritesToCloud() {
                 if (currentUser) {
@@ -1530,22 +1613,22 @@
                 modal.className = 'modal-converter show';
                 modal.style.zIndex = 4000;
                 modal.innerHTML = `
-                    <div class="modal-content" style="font-size:1.25rem;line-height:1.7;">
+                    <div class="modal-content recipe-modal-content">
                         <button class="modal-close-btn" aria-label="Close recipe">&times;</button>
-                        <h2 style="font-size:2rem;margin-bottom:0.7rem;">${recipe.title}</h2>
-                        <p style="color:#888;margin-bottom:1rem;font-size:1.15rem;text-align:center;">${recipe.desc}</p>
-                        <strong style="font-size:1.2rem;">Ingredients:</strong>
-                        <ul style="margin-bottom:1rem;font-size:1.15rem;">${recipe.ingredients.map(i => `<li>${i}</li>`).join('')}</ul>
-                        <strong style="font-size:1.2rem;">Bake:</strong> <span style="font-size:1.15rem;">${recipe.ovenTime} at ${recipe.ovenTemp}</span><br><br>
-                        <strong style="font-size:1.2rem;">Instructions:</strong>
-                        <ol style="font-size:1.15rem;line-height:1.7;margin-left:1.2rem;">
+                        <h2 class="recipe-modal-title">${recipe.title}</h2>
+                        <p class="recipe-modal-desc">${recipe.desc}</p>
+                        <strong>Ingredients:</strong>
+                        <ul class="recipe-modal-list">${recipe.ingredients.map(i => `<li>${i}</li>`).join('')}</ul>
+                        <strong>Bake:</strong> <span class="recipe-modal-bake">${recipe.ovenTime} at ${recipe.ovenTemp}</span><br><br>
+                        <strong>Instructions:</strong>
+                        <ol class="recipe-modal-steps">
                             ${(() => {
                         // Split by numbered steps, or fallback to splitting by newlines
                         let steps = recipe.instructions.match(/(\d+\.\s.*?)(?=\n\d+\.|$)/gs);
                         if (!steps) {
                             steps = recipe.instructions.split(/\n+/).filter(s => s.trim());
                         }
-                        return steps.map((step, i) => `<li style='margin-bottom:0.8rem;'>${step.replace(/^\d+\.\s*/, '').trim()}</li>`).join('');
+                        return steps.map((step, i) => `<li class='recipe-modal-step'>${step.replace(/^\d+\.\s*/, '').trim()}</li>`).join('');
                     })()}
                         </ol>
                     </div>
@@ -1553,21 +1636,6 @@
                 document.body.appendChild(modal);
                 // Close modal
                 modal.querySelector('.modal-close-btn').addEventListener('click', function () {
-                    modal.remove();
-                });
-                // Heart icon logic
-                modal.querySelector('.heart-icon-btn').addEventListener('click', function () {
-                    if (favorites.includes(recipe)) {
-                        favorites = favorites.filter(f => f !== recipe);
-                    } else {
-                        favorites.push(recipe);
-                    }
-                    updateFavoritesSidebar();
-                    if (currentUser) {
-                        saveFavoritesToCloud();
-                    } else {
-                        saveFavoritesToLocal();
-                    }
                     modal.remove();
                 });
                 // Close modal on backdrop click
@@ -1581,8 +1649,8 @@
             function displayRecipes(recipesToShow) {
                 recipeList.innerHTML = '';
                 // Sort recipes alphabetically by title
-                recipesToShow.sort((a, b) => a.title.localeCompare(b.title));
-                if (recipesToShow.length === 0) {
+                const sortedRecipes = [...recipesToShow].sort((a, b) => a.title.localeCompare(b.title));
+                if (sortedRecipes.length === 0) {
                     const msg = document.createElement('li');
                     msg.style.listStyle = 'none';
                     msg.style.padding = '2rem';
@@ -1592,11 +1660,11 @@
                     recipeList.appendChild(msg);
                     return;
                 }
-                recipesToShow.forEach(recipe => {
+                sortedRecipes.forEach(recipe => {
                     const li = document.createElement('li');
                     li.style.listStyle = 'none';
                     li.style.padding = '1rem';
-                    li.style.borderBottom = '1px solid #eee';
+                    li.style.borderBottom = '1.5px solid #eee';
                     li.style.display = 'flex';
                     li.style.justifyContent = 'space-between';
                     li.style.alignItems = 'center';
@@ -1614,17 +1682,7 @@
                     });
                     // Heart icon click
                     li.querySelector('.heart-icon-btn').addEventListener('click', function () {
-                        if (favorites.includes(recipe)) {
-                            favorites = favorites.filter(f => f !== recipe);
-                        } else {
-                            favorites.push(recipe);
-                        }
-                        updateFavoritesSidebar();
-                        if (currentUser) {
-                            saveFavoritesToCloud();
-                        } else {
-                            saveFavoritesToLocal();
-                        }
+                        toggleFavorite(recipe);
                         displayRecipes(filteredRecipes());
                     });
                     recipeList.appendChild(li);
@@ -1635,21 +1693,21 @@
             const searchBar = document.getElementById('searchBar');
             // Recipe categories
             const recipeCategories = {
-                bread: ["Bagels", "Flatbread", "Breadsticks", "Banana Bread", "Focaccia", "Pizza", "Garlic Bread", "Pumpkin Bread", "Shortbread"],
+                bread: ["Bagels", "Flatbread", "Breadsticks", "Banana Bread", "Focaccia", "Pizza", "Garlic Bread", "Pumpkin Bread", "Shortbread", "Vegan Tomato Basil Flatbread", "Vegan Lemon Coconut Loaf"],
                 cake: ["Chocolate Cake", "Vanilla Cake", "Carrot Cake", "Cupcakes"],
                 cookies: ["Chocolate Chip Cookies", "Peanut Butter Cookies", "Oatmeal Raisin Cookies"],
-                muffins: ["Apple Muffins", "Chocolate Muffins", "Lemon Poppy Seed Muffins"],
-                bars: ["Granola Bars", "Lemon Bars"],
-                pancakes: ["Pancakes", "Blueberry Pancakes", "Waffles"],
-                pan: ["Apple Crisp", "Cinnamon Rolls", "Brownies"],
+                muffins: ["Apple Muffins", "Chocolate Muffins", "Lemon Poppy Seed Muffins", "Vegan Spinach Feta Muffins"],
+                bars: ["Granola Bars", "Lemon Bars", "Vegan Chickpea Blondies"],
+                pancakes: ["Pancakes", "Blueberry Pancakes", "Waffles", "Vegan Apple Cinnamon Waffles"],
+                pan: ["Apple Crisp", "Cinnamon Rolls", "Brownies", "Vegan Sweet Potato Brownies"],
             };
             // Taste filter mapping
             const tasteMap = {
                 sweet: [
-                    "Chocolate Muffins", "Berry Crisp", "Black Bean Brownies", "Pumpkin Bread", "Peanut Butter Cookies", "Lemon Bars", "Granola Bars", "Apple Muffins", "Blueberry Pancakes", "Vanilla Cake", "Cinnamon Rolls", "Brownies", "Cupcakes", "Donuts", "Waffles", "Shortbread", "Banana Bread", "Almond Flour Chocolate Cake", "Oatmeal Raisin Cookies", "Lemon Poppy Seed Muffins", "Chocolate Chip Cookies", "Apple Crisp", "Carrot Cake", "Coconut Macaroons"
+                    "Chocolate Muffins", "Berry Crisp", "Black Bean Brownies", "Pumpkin Bread", "Peanut Butter Cookies", "Lemon Bars", "Granola Bars", "Apple Muffins", "Blueberry Pancakes", "Vanilla Cake", "Cinnamon Rolls", "Brownies", "Cupcakes", "Donuts", "Waffles", "Shortbread", "Banana Bread", "Almond Flour Chocolate Cake", "Oatmeal Raisin Cookies", "Lemon Poppy Seed Muffins", "Chocolate Chip Cookies", "Apple Crisp", "Carrot Cake", "Coconut Macaroons", "Vegan Chickpea Blondies", "Vegan Lemon Coconut Loaf", "Vegan Apple Cinnamon Waffles", "Vegan Sweet Potato Brownies"
                 ],
                 salty: [
-                    "Spinach Quiche", "Chicken Pot Pie", "Falafel", "Veggie Pizza", "Zucchini Bread", "Cheese Biscuits", "Garlic Bread", "Bagels", "Scones", "Flatbread", "Breadsticks", "Pizza", "Focaccia", "Sweet Potato Fries"
+                    "Spinach Quiche", "Chicken Pot Pie", "Falafel", "Veggie Pizza", "Zucchini Bread", "Cheese Biscuits", "Garlic Bread", "Bagels", "Scones", "Flatbread", "Breadsticks", "Pizza", "Focaccia", "Sweet Potato Fries", "Vegan Spinach Feta Muffins", "Vegan Tomato Basil Flatbread"
                 ]
             };
             let selectedCategory = "all";
